@@ -20,12 +20,12 @@ export const NavigateBackButton = ({ page }: INavigateBackButton) => {
 		navigateTo(page);
 	};
 
+	const navigate = () => {
+		page === 'back' ? handleNavigateBack() : handleNavigateToPage();
+	};
+
 	return (
-		<IconButton
-			edge="start"
-			className={classes.button}
-			onClick={page === 'back' ? handleNavigateBack : handleNavigateToPage}
-		>
+		<IconButton edge="start" className={classes.button} onClick={navigate}>
 			<ChevronLeftRounded className={classes.icon} />
 		</IconButton>
 	);

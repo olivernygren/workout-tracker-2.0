@@ -66,6 +66,9 @@ export const theme = createTheme({
 			color: '#fff',
 			zIndex: 1,
 		},
+		button: {
+			color: '#fff',
+		},
 	},
 	palette: {
 		primary: {

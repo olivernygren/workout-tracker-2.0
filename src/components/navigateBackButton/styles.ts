@@ -2,14 +2,9 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles((theme) => ({
 	button: {
-		color: theme.palette.common.black,
-		padding: 8,
-		marginRight: 6,
-		marginBottom: 3,
-		[theme.breakpoints.down(450)]: {
-			padding: 6,
-			marginRight: 4,
-		},
+		color: theme.palette.common.white,
+		padding: 6,
+		marginRight: 3,
 	},
 	icon: {
 		width: 30,
