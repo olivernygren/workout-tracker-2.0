@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { Page, TitleHeader, WorkoutCard } from '../../components';
+import { workoutNameToPathConverter, workouts } from '../../utils';
 
 export const AllWorkoutsPage = () => {
 	const classes = useStyles();
@@ -36,12 +37,13 @@ export const AllWorkoutsPage = () => {
 				/>
 			</Grid>
 			<Grid item container direction="column" className={classes.cardContainer}>
-				<WorkoutCard />
-				<WorkoutCard />
-				<WorkoutCard />
-				<WorkoutCard />
-				<WorkoutCard />
-				<WorkoutCard />
+				{workouts.map((workout) => (
+					<WorkoutCard
+						name={workout.name}
+						sets={20}
+						path={workoutNameToPathConverter(workout.name)}
+					/>
+				))}
 			</Grid>
 		</Page>
 	);
