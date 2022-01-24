@@ -1,16 +1,23 @@
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, Typography } from '@material-ui/core';
 import { AddRounded, EditRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import useStyles from './styles';
 import { Page, TitleHeader } from '../../components';
-import { pathToWorkoutNameConverter } from '../../utils';
+import { pathToWorkoutNameConverter, workouts } from '../../utils';
+import { Exercise, ExerciseInstance, Workout } from '../../types';
+import { useState } from 'react';
 
 export const WorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
 	const { name } = useParams();
-	const workoutName = pathToWorkoutNameConverter(name!);
+	const workoutNameFromPath = pathToWorkoutNameConverter(name!);
+	const [workout, setWorkout] = useState<Workout>({
+		name: '',
+		targetMuscles: [],
+		exercises: [],
+	});
 
 	const HeaderButton = () => (
 		<Button
@@ -28,17 +35,28 @@ export const WorkoutPage = () => {
 		navigateTo('/link');
 	};
 
+	const workoutObject = workouts.find(
+		(workout) => workout.name === workoutNameFromPath
+	);
+
 	return (
-		<Page title={workoutName}>
+		<Page title={workoutNameFromPath}>
 			<Grid item container direction="column">
 				<TitleHeader
-					title={workoutName}
+					title={workoutNameFromPath}
 					titleSize="small"
 					navigateBackButton
 					navigateTo="back"
 					button={<HeaderButton />}
 				/>
 			</Grid>
+			{workoutObject!.exercises.map((exercise: ExerciseInstance) => (
+				<Grid item container direction="column">
+					<Typography>{exercise.exercise.name}</Typography>
+					<Typography>{exercise.sets + ' × ' + exercise.repRange}</Typography>
+					{/* <Typography>{exercise.repRange}</Typography> */}
+				</Grid>
+			))}
 		</Page>
 	);
 };
