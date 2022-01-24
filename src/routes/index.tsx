@@ -1,4 +1,4 @@
-import { AllWorkoutsPage } from '../pages';
+import { AllWorkoutsPage, WorkoutPage } from '../pages';
 import HomePage from '../pages/home';
 
 export const routes = [
@@ -9,5 +9,9 @@ export const routes = [
 	{
 		path: '/all-workouts',
 		element: <AllWorkoutsPage />,
+	},
+	{
+		path: '/workout/:name',
+		element: <WorkoutPage />,
 	},
 ];

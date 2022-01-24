@@ -9,6 +9,7 @@ interface ITitleHeader {
 	navigateBackButton?: boolean;
 	navigateTo?: string;
 	button?: JSX.Element;
+	titleSize?: string;
 }
 
 export const TitleHeader = ({
@@ -16,12 +17,14 @@ export const TitleHeader = ({
 	navigateBackButton,
 	navigateTo,
 	button,
+	titleSize,
 }: ITitleHeader) => {
 	const classes = useStyles();
 	return (
 		<Grid item container className={classes.titleHeader}>
 			<Title
 				title={title}
+				titleSize={titleSize}
 				navigateBackButton={navigateBackButton}
 				navigateTo={navigateTo}
 			/>

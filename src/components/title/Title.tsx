@@ -8,14 +8,22 @@ interface ITitle {
 	title: string;
 	navigateBackButton?: boolean;
 	navigateTo?: string;
+	titleSize?: string;
 }
 
-export const Title = ({ title, navigateBackButton, navigateTo }: ITitle) => {
+export const Title = ({
+	title,
+	navigateBackButton,
+	navigateTo,
+	titleSize,
+}: ITitle) => {
 	const classes = useStyles();
+	const getTitleSize = titleSize === 'small' ? 'h5' : 'h3';
+
 	return (
 		<Grid item container className={classes.titleContainer}>
 			{navigateBackButton && <NavigateBackButton page={navigateTo!} />}
-			<Typography variant="h3" className={classes.title}>
+			<Typography variant={getTitleSize} className={classes.title}>
 				{title}
 			</Typography>
 		</Grid>

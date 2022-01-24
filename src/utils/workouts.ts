@@ -172,7 +172,7 @@ export const workouts: Workout[] = [
 					targetMuscles: [muscleGroupEnum.BACK],
 					progress: [],
 				},
-				sets: 4,
+				sets: 5,
 				repRange: '8-12',
 			},
 			{

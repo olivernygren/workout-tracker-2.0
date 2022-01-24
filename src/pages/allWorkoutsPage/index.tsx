@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import useStyles from './styles';
 import { Page, TitleHeader, WorkoutCard } from '../../components';
 import { workoutNameToPathConverter, workouts } from '../../utils';
+import { getNumberOfSets } from '../../utils/getNumberOfSets';
 
 export const AllWorkoutsPage = () => {
 	const classes = useStyles();
@@ -40,7 +41,7 @@ export const AllWorkoutsPage = () => {
 				{workouts.map((workout) => (
 					<WorkoutCard
 						name={workout.name}
-						sets={20}
+						sets={getNumberOfSets(workout)}
 						path={workoutNameToPathConverter(workout.name)}
 					/>
 				))}
