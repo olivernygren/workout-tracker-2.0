@@ -4,3 +4,4 @@ export * from './home';
 export * from './title';
 export * from './navigateBackButton';
 export * from './titleHeader';
+export * from './workoutCard';
