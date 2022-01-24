@@ -1,34 +1,42 @@
-import { Grid, Typography, Button } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { ChevronRightRounded } from '@material-ui/icons';
 
 import useStyles from './styles';
-import { Page, Title } from '../../components';
+import { HomeCard, HomeWorkoutCard, Page, TitleHeader } from '../../components';
+import { homePageCards } from '../../utils';
 
 export const HomePage = () => {
 	const classes = useStyles();
 
+	const HeaderButton = () => (
+		<Button endIcon={<ChevronRightRounded />} className={classes.headerButton}>
+			Se alla
+		</Button>
+	);
+
 	return (
 		<Page title="Hem">
 			<Grid item container direction="column">
-				<Grid item container className={classes.titleHeader}>
-					<Title title="Dina pass" />
-					<Button
-						endIcon={<ChevronRightRounded />}
-						className={classes.headerButton}
-					>
-						Se alla
-					</Button>
+				<TitleHeader title="Dina pass" button={<HeaderButton />} />
+				<Grid item container className={classes.workoutCardContainer}>
+					<HomeWorkoutCard
+						name="Chest &amp; Biceps 1"
+						exercises={5}
+						sets={20}
+					/>
+					<HomeWorkoutCard name="Legs 1" exercises={5} sets={20} />
+					<HomeWorkoutCard
+						name="Shoulders &amp; Triceps 1"
+						exercises={5}
+						sets={20}
+					/>
+					<HomeWorkoutCard name="Back 1" exercises={5} sets={20} />
 				</Grid>
-				{/* <Typography variant="h1">Skapa pass</Typography>
-				<Typography variant="h2">Skapa pass</Typography>
-				<Typography variant="h3">Skapa pass</Typography>
-				<Typography variant="h4">Skapa pass</Typography>
-				<Typography variant="h5">Skapa pass</Typography>
-				<Typography variant="h6">Skapa pass</Typography>
-				<Typography variant="subtitle1">Skapa pass</Typography>
-				<Typography variant="subtitle2">Skapa pass</Typography>
-				<Typography variant="body1">Skapa pass</Typography>
-				<Typography variant="body2">Skapa pass</Typography> */}
+				<Grid item container className={classes.cardContainer}>
+					{homePageCards.map((card) => (
+						<HomeCard label={card.label} icon={card.icon} path={card.path} />
+					))}
+				</Grid>
 			</Grid>
 		</Page>
 	);

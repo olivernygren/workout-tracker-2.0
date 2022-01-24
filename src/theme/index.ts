@@ -2,6 +2,18 @@ import { createTheme } from '@material-ui/core';
 
 const FONT_PRIMARY = 'Outfit';
 
+interface Gradient {
+	gradient: string;
+}
+declare module '@material-ui/core/styles/createPalette' {
+	interface Palette {
+		gradient: Gradient;
+	}
+	interface PaletteOptions {
+		gradient?: Gradient;
+	}
+}
+
 export const theme = createTheme({
 	typography: {
 		fontFamily: [FONT_PRIMARY, 'sans-serif'].join(','),
@@ -84,6 +96,10 @@ export const theme = createTheme({
 		common: {
 			white: '#fff',
 			black: '#000',
+		},
+		gradient: {
+			gradient:
+				'linear-gradient(135deg, rgba(55,55,55,1) 0%, rgba(43,43,43,1) 100%)',
 		},
 	},
 });
