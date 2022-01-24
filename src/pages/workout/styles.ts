@@ -8,4 +8,7 @@ export default makeStyles((theme) => ({
 		fontSize: 13,
 		alignSelf: 'center',
 	},
+	cardContainer: {
+		marginTop: 30,
+	},
 }));

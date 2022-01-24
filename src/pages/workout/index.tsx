@@ -3,7 +3,7 @@ import { AddRounded, EditRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import useStyles from './styles';
-import { Page, TitleHeader } from '../../components';
+import { ExerciseCard, Page, TitleHeader } from '../../components';
 import { pathToWorkoutNameConverter, workouts } from '../../utils';
 import { Exercise, ExerciseInstance, Workout } from '../../types';
 import { useState } from 'react';
@@ -23,6 +23,7 @@ export const WorkoutPage = () => {
 		<Button
 			endIcon={<EditRounded fontSize="small" />}
 			className={classes.headerButton}
+			disableElevation
 			color="secondary"
 			variant="contained"
 			onClick={handleNavigate}
@@ -50,13 +51,15 @@ export const WorkoutPage = () => {
 					button={<HeaderButton />}
 				/>
 			</Grid>
-			{workoutObject!.exercises.map((exercise: ExerciseInstance) => (
-				<Grid item container direction="column">
-					<Typography>{exercise.exercise.name}</Typography>
-					<Typography>{exercise.sets + ' × ' + exercise.repRange}</Typography>
-					{/* <Typography>{exercise.repRange}</Typography> */}
-				</Grid>
-			))}
+			<Grid item container direction="column" className={classes.cardContainer}>
+				{workoutObject!.exercises.map((exercise: ExerciseInstance) => (
+					<ExerciseCard
+						exercise={exercise.exercise.name}
+						sets={exercise.sets}
+						repRange={exercise.repRange}
+					/>
+				))}
+			</Grid>
 		</Page>
 	);
 };

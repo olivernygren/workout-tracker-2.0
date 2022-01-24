@@ -15,6 +15,7 @@ export const AllWorkoutsPage = () => {
 		<Button
 			endIcon={<AddRounded />}
 			className={classes.headerButton}
+			disableElevation
 			color="primary"
 			variant="contained"
 			onClick={handleNavigate}

@@ -14,6 +14,7 @@ export const TemplatePage = () => {
 			endIcon={<AddRounded />}
 			className={classes.headerButton}
 			color="primary"
+			disableElevation
 			variant="contained"
 			onClick={handleNavigate}
 		>
