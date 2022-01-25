@@ -57,6 +57,7 @@ export const WorkoutPage = () => {
 						exercise={exercise.exercise.name}
 						sets={exercise.sets}
 						repRange={exercise.repRange}
+						key={exercise.exercise.name}
 					/>
 				))}
 			</Grid>

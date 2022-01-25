@@ -44,6 +44,7 @@ export const AllWorkoutsPage = () => {
 						name={workout.name}
 						sets={getNumberOfSets(workout)}
 						path={workoutNameToPathConverter(workout.name)}
+						key={workout.name}
 					/>
 				))}
 			</Grid>

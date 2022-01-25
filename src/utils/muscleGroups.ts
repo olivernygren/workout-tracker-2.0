@@ -1,0 +1,25 @@
+import { muscleGroupEnum } from '.';
+
+export const muscleGroups = [
+	muscleGroupEnum.CHEST,
+	muscleGroupEnum.BACK,
+	muscleGroupEnum.LEGS,
+	muscleGroupEnum.SHOULDERS,
+	muscleGroupEnum.ARMS,
+	muscleGroupEnum.BICEPS,
+	muscleGroupEnum.TRICEPS,
+	muscleGroupEnum.QUADS,
+	muscleGroupEnum.HAMSTRINGS,
+	muscleGroupEnum.GLUTES,
+	muscleGroupEnum.ADDUCTORS,
+	muscleGroupEnum.CALVES,
+	muscleGroupEnum.ABS,
+	muscleGroupEnum.LATS,
+	muscleGroupEnum.TRAPS,
+	muscleGroupEnum.UPPER_BACK,
+	muscleGroupEnum.UPPER_CHEST,
+	muscleGroupEnum.REAR_DELTS,
+	muscleGroupEnum.SIDE_DELTS,
+	muscleGroupEnum.FRONT_DELTS,
+	muscleGroupEnum.LOWER_BACK,
+];

@@ -44,7 +44,12 @@ export const HomePage = () => {
 				</Grid>
 				<Grid item container className={classes.cardContainer}>
 					{homePageCards.map((card) => (
-						<HomeCard label={card.label} icon={card.icon} path={card.path} />
+						<HomeCard
+							label={card.label}
+							icon={card.icon}
+							path={card.path}
+							key={card.label}
+						/>
 					))}
 				</Grid>
 			</Grid>
