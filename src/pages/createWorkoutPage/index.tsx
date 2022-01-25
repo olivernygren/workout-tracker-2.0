@@ -8,20 +8,21 @@ import {
 	InputLabel,
 	FormControl,
 	Button,
+	InputAdornment,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
-import { Page, TitleHeader } from '../../components';
+import { Page, StyledTextField, TitleHeader } from '../../components';
 import { muscleGroupEnum, muscleGroups } from '../../utils';
-import { AddRounded } from '@material-ui/icons';
+import { AddRounded, SearchRounded } from '@material-ui/icons';
 
 export const CreateWorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
 
 	const handleNavigate = () => {
-		navigateTo('/link');
+		navigateTo('/add-exercises');
 	};
 
 	return (
@@ -38,7 +39,7 @@ export const CreateWorkoutPage = () => {
 				<Typography variant="subtitle1" className={classes.label}>
 					Namn
 				</Typography>
-				<input className={classes.input} />
+				<StyledTextField />
 				<Typography variant="subtitle1" className={classes.label}>
 					Muskelgrupper
 				</Typography>
@@ -65,11 +66,15 @@ export const CreateWorkoutPage = () => {
 						disableElevation
 						color="primary"
 						variant="contained"
-						// onClick={handleNavigate}
+						onClick={handleNavigate}
 					>
 						Lägg till
 					</Button>
 				</Grid>
+				<StyledTextField
+					placeholder="Sök"
+					icon={{ element: <SearchRounded />, position: 'start' }}
+				/>
 			</Grid>
 		</Page>
 	);
