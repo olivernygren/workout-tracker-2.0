@@ -6,6 +6,7 @@ import {
 	FormControl,
 	Button,
 	Box,
+	IconButton,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
@@ -110,7 +111,29 @@ export const CreateWorkoutPage = () => {
 					{searchResults.length > 0 && (
 						<Box className={classes.searchResultsContainer}>
 							{searchResults.map((exercise) => (
-								<Typography>{exercise.name}</Typography>
+								<Grid item container className={classes.searchResult}>
+									<Grid item container>
+										<Typography variant="body1">{exercise.name}</Typography>
+										<Typography
+											variant="body1"
+											className={classes.searchResultSeparator}
+										>
+											/
+										</Typography>
+										<Typography
+											variant="body2"
+											className={classes.searchResultTargetMuscle}
+										>
+											{exercise.targetMuscles[0]}
+										</Typography>
+									</Grid>
+									<IconButton className={classes.searchResultAddIconButton}>
+										<AddRounded
+											className={classes.searchResultIcon}
+											fontSize="small"
+										/>
+									</IconButton>
+								</Grid>
 							))}
 						</Box>
 					)}

@@ -77,4 +77,24 @@ export default makeStyles((theme) => ({
 		maxHeight: 150,
 		overflowY: 'scroll',
 	},
+	searchResult: {
+		flexWrap: 'nowrap',
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	searchResultTargetMuscle: {
+		color: theme.palette.grey[500],
+		marginTop: 3,
+	},
+	searchResultSeparator: {
+		marginRight: 5,
+		marginLeft: 5,
+		color: theme.palette.grey[500],
+	},
+	searchResultAddIconButton: {
+		padding: 5,
+	},
+	searchResultIcon: {
+		color: theme.palette.common.white,
+	},
 }));
