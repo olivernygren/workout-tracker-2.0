@@ -1,4 +1,4 @@
-import { muscleGroupEnum, workoutNameToPathConverter } from '.';
+import { muscleGroupEnum } from '.';
 import { Workout } from '../types';
 
 export const workouts: Workout[] = [

@@ -1,21 +1,17 @@
 import {
 	Grid,
 	Typography,
-	TextField,
 	Select,
 	MenuItem,
-	InputBase,
-	InputLabel,
 	FormControl,
 	Button,
-	InputAdornment,
 	Box,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
-import { exerciseDatabase, muscleGroupEnum, muscleGroups } from '../../utils';
+import { exerciseDatabase, muscleGroups } from '../../utils';
 import { AddRounded, SearchRounded } from '@material-ui/icons';
 import { useState } from 'react';
 import { Exercise } from '../../types';
@@ -45,7 +41,6 @@ export const CreateWorkoutPage = () => {
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		console.log(event.target.value);
 		searchFunction(event.target.value);
 	};
 
@@ -62,26 +57,30 @@ export const CreateWorkoutPage = () => {
 				direction="column"
 				className={classes.contentContainer}
 			>
-				<Typography variant="subtitle1" className={classes.label}>
-					Namn
-				</Typography>
-				<StyledTextField />
-				<Typography variant="subtitle1" className={classes.label}>
-					Muskelgrupper
-				</Typography>
-				<FormControl fullWidth>
-					<Select
-						id="demo-simple-select"
-						className={classes.select}
-						placeholder="Välj"
-					>
-						{muscleGroups.map((muscleGroup) => (
-							<MenuItem value={muscleGroup} className={classes.menuItem}>
-								{muscleGroup}
-							</MenuItem>
-						))}
-					</Select>
-				</FormControl>
+				<Grid item>
+					<Typography variant="subtitle1" className={classes.label}>
+						Namn
+					</Typography>
+					<StyledTextField fullWidth />
+				</Grid>
+				<Grid item>
+					<Typography variant="subtitle1" className={classes.label}>
+						Muskelgrupper
+					</Typography>
+					<FormControl fullWidth>
+						<Select
+							id="demo-simple-select"
+							className={classes.select}
+							placeholder="Välj"
+						>
+							{muscleGroups.map((muscleGroup) => (
+								<MenuItem value={muscleGroup} className={classes.menuItem}>
+									{muscleGroup}
+								</MenuItem>
+							))}
+						</Select>
+					</FormControl>
+				</Grid>
 				<Grid item container className={classes.exercisesHeader}>
 					<Typography variant="h5" className={classes.label}>
 						Övningar

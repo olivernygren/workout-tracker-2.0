@@ -1,5 +1,4 @@
 import { Workout } from '../types';
-import { workouts } from './workouts';
 
 export const getNumberOfSets = (workout: Workout) => {
 	const setsArray: number[] = [];

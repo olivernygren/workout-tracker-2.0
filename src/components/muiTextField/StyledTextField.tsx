@@ -9,12 +9,14 @@ interface IStyledTextField {
 		element: JSX.Element;
 	};
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	fullWidth?: boolean;
 }
 
 export const StyledTextField = ({
 	placeholder,
 	icon,
 	onChange,
+	fullWidth,
 }: IStyledTextField) => {
 	const classes = useStyles();
 	const iconPaddingAdjust = !icon ? { paddingLeft: 8 } : { paddingLeft: 0 };
@@ -27,6 +29,7 @@ export const StyledTextField = ({
 	return (
 		<TextField
 			variant="filled"
+			fullWidth={fullWidth}
 			placeholder={placeholder}
 			onChange={onChange}
 			inputProps={{ className: classes.muiInput }}
