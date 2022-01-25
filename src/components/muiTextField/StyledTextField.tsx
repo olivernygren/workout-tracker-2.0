@@ -8,10 +8,14 @@ interface IStyledTextField {
 		position: 'start' | 'end';
 		element: JSX.Element;
 	};
-	onChange?: () => void;
+	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export const StyledTextField = ({ placeholder, icon }: IStyledTextField) => {
+export const StyledTextField = ({
+	placeholder,
+	icon,
+	onChange,
+}: IStyledTextField) => {
 	const classes = useStyles();
 	const iconPaddingAdjust = !icon ? { paddingLeft: 8 } : { paddingLeft: 0 };
 	const iconAdornment = icon && (
@@ -24,6 +28,7 @@ export const StyledTextField = ({ placeholder, icon }: IStyledTextField) => {
 		<TextField
 			variant="filled"
 			placeholder={placeholder}
+			onChange={onChange}
 			inputProps={{ className: classes.muiInput }}
 			InputProps={{
 				className: classes.muiInput,

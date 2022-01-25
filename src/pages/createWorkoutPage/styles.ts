@@ -61,4 +61,20 @@ export default makeStyles((theme) => ({
 		justifyContent: 'space-between',
 		margin: '30px 0 12px 0',
 	},
+	exercisesContainer: {
+		position: 'relative',
+		marginBottom: 200,
+	},
+	searchResultsContainer: {
+		position: 'absolute',
+		left: 0,
+		right: 0,
+		top: 54,
+		height: 'fit-content',
+		backgroundColor: theme.palette.secondary.light,
+		borderRadius: 10,
+		padding: 10,
+		maxHeight: 150,
+		overflowY: 'scroll',
+	},
 }));

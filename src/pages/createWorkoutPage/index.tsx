@@ -9,21 +9,47 @@ import {
 	FormControl,
 	Button,
 	InputAdornment,
+	Box,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
-import { muscleGroupEnum, muscleGroups } from '../../utils';
+import { exerciseDatabase, muscleGroupEnum, muscleGroups } from '../../utils';
 import { AddRounded, SearchRounded } from '@material-ui/icons';
+import { useState } from 'react';
+import { Exercise } from '../../types';
 
 export const CreateWorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
+	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
 
 	const handleNavigate = () => {
 		navigateTo('/add-exercises');
 	};
+
+	const searchFunction = (text: string) => {
+		const arr = exerciseDatabase;
+		const searchArr = arr.filter((exercise: Exercise) => {
+			if (text !== '') {
+				return (
+					exercise.name.toLowerCase().match(text.toLowerCase()) ||
+					exercise.targetMuscles[0].toLowerCase().match(text.toLowerCase())
+				);
+			} else {
+				return '';
+			}
+		});
+		setSearchResults(searchArr);
+	};
+
+	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		console.log(event.target.value);
+		searchFunction(event.target.value);
+	};
+
+	// onBlur setSearchResults([])
 
 	return (
 		<Page title="Skapa pass">
@@ -71,10 +97,25 @@ export const CreateWorkoutPage = () => {
 						Lägg till
 					</Button>
 				</Grid>
-				<StyledTextField
-					placeholder="Sök"
-					icon={{ element: <SearchRounded />, position: 'start' }}
-				/>
+				<Grid
+					container
+					item
+					direction="column"
+					className={classes.exercisesContainer}
+				>
+					<StyledTextField
+						placeholder="Sök"
+						icon={{ element: <SearchRounded />, position: 'start' }}
+						onChange={handleChange}
+					/>
+					{searchResults.length > 0 && (
+						<Box className={classes.searchResultsContainer}>
+							{searchResults.map((exercise) => (
+								<Typography>{exercise.name}</Typography>
+							))}
+						</Box>
+					)}
+				</Grid>
 			</Grid>
 		</Page>
 	);
