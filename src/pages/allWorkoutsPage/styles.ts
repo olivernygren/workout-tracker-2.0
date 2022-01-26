@@ -12,4 +12,7 @@ export default makeStyles((theme) => ({
 	cardContainer: {
 		marginTop: 30,
 	},
+	titleHeaderContainer: {
+		height: 'fit-content',
+	},
 }));

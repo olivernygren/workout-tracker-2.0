@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
 		width: '100%',
 		alignItems: 'start',
 		justifyContent: 'space-between',
+		// height: 'fit-content',
 	},
 	headerButton: {
 		textTransform: 'capitalize',

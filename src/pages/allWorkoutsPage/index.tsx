@@ -30,7 +30,12 @@ export const AllWorkoutsPage = () => {
 
 	return (
 		<Page title="Alla Pass">
-			<Grid item container direction="column">
+			<Grid
+				item
+				container
+				direction="column"
+				className={classes.titleHeaderContainer}
+			>
 				<TitleHeader
 					title="Alla pass"
 					navigateBackButton

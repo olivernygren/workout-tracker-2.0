@@ -6,4 +6,5 @@ export * from './navigateBackButton';
 export * from './titleHeader';
 export * from './workoutCard';
 export * from './exerciseCard';
+export * from './exerciseToAdd';
 export * from './muiTextField';

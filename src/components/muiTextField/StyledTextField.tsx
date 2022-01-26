@@ -9,22 +9,44 @@ interface IStyledTextField {
 		element: JSX.Element;
 	};
 	onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+	onBlur?: () => void;
+	onFocus?:
+		| (() => void)
+		| ((event: React.ChangeEvent<HTMLInputElement>) => void);
 	fullWidth?: boolean;
+	value?: any;
+	defaultValue?: any;
+	className?: string;
+	small?: boolean;
+	tiny?: boolean;
 }
 
 export const StyledTextField = ({
 	placeholder,
 	icon,
 	onChange,
+	onBlur,
+	// onFocus,
 	fullWidth,
+	value,
+	className,
+	small,
+	tiny,
 }: IStyledTextField) => {
 	const classes = useStyles();
-	const iconPaddingAdjust = !icon ? { paddingLeft: 8 } : { paddingLeft: 0 };
+	const iconPaddingAdjust =
+		!tiny && !small && !icon ? { paddingLeft: 8 } : { paddingLeft: 0 };
 	const iconAdornment = icon && (
 		<InputAdornment position={icon.position} className={classes.inputIcon}>
 			{icon.element}
 		</InputAdornment>
 	);
+	const inputClass = small
+		? classes.smallInput
+		: tiny
+		? classes.tinyInput
+		: classes.muiInput;
+	const parentDivClass = small || tiny ? classes.divParent : classes.muiInput;
 
 	return (
 		<TextField
@@ -32,9 +54,12 @@ export const StyledTextField = ({
 			fullWidth={fullWidth}
 			placeholder={placeholder}
 			onChange={onChange}
-			inputProps={{ className: classes.muiInput }}
+			onBlur={onBlur}
+			value={value}
+			className={className}
+			inputProps={{ className: inputClass }}
 			InputProps={{
-				className: classes.muiInput,
+				className: parentDivClass,
 				style: iconPaddingAdjust,
 				startAdornment: iconAdornment,
 			}}

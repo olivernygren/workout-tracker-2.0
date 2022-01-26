@@ -24,4 +24,48 @@ export default makeStyles((theme) => ({
 				marginLeft: 10,
 			},
 	},
+	smallInput: {
+		height: 20,
+		width: 40,
+		backgroundImage: theme.palette.gradient.gradient,
+		padding: '2px 4px',
+		borderRadius: 4,
+		border: 'none',
+		outline: 'none',
+		color: theme.palette.common.white,
+		fontSize: 14,
+		alignItems: 'center',
+		textAlign: 'center',
+	},
+	tinyInput: {
+		height: 20,
+		width: 20,
+		backgroundImage: theme.palette.gradient.gradient,
+		padding: '2px 4px',
+		borderRadius: 4,
+		border: 'none',
+		outline: 'none',
+		color: theme.palette.common.white,
+		fontSize: 14,
+		alignItems: 'center',
+		textAlign: 'center',
+	},
+	divParent: {
+		backgroundColor: 'transparent',
+		height: 'fit-content',
+		width: 'fit-content',
+		paddingLeft: '0px',
+		'&.MuiFilledInput-underline:after': {
+			borderBottom: 'none',
+		},
+		'&.MuiFilledInput-underline:hover:before': {
+			borderBottom: 'none',
+		},
+		'&.MuiFilledInput-underline:before': {
+			borderBottom: 'none',
+		},
+		'&.MuiFilledInput-underline:hover:after': {
+			borderBottom: 'none',
+		},
+	},
 }));

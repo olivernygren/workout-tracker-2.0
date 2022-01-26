@@ -12,15 +12,24 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
-import { Page, StyledTextField, TitleHeader } from '../../components';
-import { exerciseDatabase, muscleGroups } from '../../utils';
+import {
+	ExerciseToAdd,
+	Page,
+	StyledTextField,
+	TitleHeader,
+} from '../../components';
+import {
+	exerciseDatabase,
+	muscleGroups,
+	workoutNameToPathConverter,
+} from '../../utils';
 import {
 	AddRounded,
 	ExpandMoreRounded,
 	SearchRounded,
 } from '@material-ui/icons';
 import { useState } from 'react';
-import { Exercise } from '../../types';
+import { Exercise, ExerciseInstance, Workout } from '../../types';
 
 export const CreateWorkoutPage = () => {
 	const classes = useStyles();
@@ -29,14 +38,23 @@ export const CreateWorkoutPage = () => {
 	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
 		[]
 	);
+	const [addedExercises, setAddedExercises] = useState<Exercise[]>([]);
+	const [exercises, setExercises] = useState<ExerciseInstance[]>([]);
+	const [value, setValue] = useState('');
+	const [workout, setWorkout] = useState<Workout>({
+		name: '',
+		exercises: [],
+		targetMuscles: [],
+		path: '',
+	});
+	// let selectedMuscleGroups: string[] = [];
 
 	const handleNavigate = () => {
 		navigateTo('/add-exercises');
 	};
 
 	const searchFunction = (text: string) => {
-		const arr = exerciseDatabase;
-		const searchArr = arr.filter((exercise: Exercise) => {
+		const searchArr = exerciseDatabase.filter((exercise: Exercise) => {
 			if (text !== '') {
 				return (
 					exercise.name.toLowerCase().match(text.toLowerCase()) ||
@@ -50,7 +68,21 @@ export const CreateWorkoutPage = () => {
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setValue(event.target.value);
 		searchFunction(event.target.value);
+	};
+
+	const handleSetName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setWorkout((oldstate) => ({
+			...oldstate,
+			name: event.target.value,
+		}));
+	};
+
+	const handleBlur = () => {
+		setTimeout(() => {
+			setSearchResults([]);
+		}, 50);
 	};
 
 	const handleSelect = (event: any) => {
@@ -58,13 +90,33 @@ export const CreateWorkoutPage = () => {
 	};
 
 	const handleDelete = (muscleGroup: string) => {
-		console.log('deteted ' + muscleGroup);
-		// hitta musclegroup i selectedmusclegroups array med .find och ta bort
+		const filteredArray = selectedMuscleGroups.filter(
+			(mg) => mg !== muscleGroup
+		);
+		setSelectedMuscleGroups(filteredArray);
 	};
 
-	// onBlur setSearchResults([])
-	console.log(selectedMuscleGroups);
+	const handleAddExercise = (exercise: Exercise) => {
+		setValue('');
+		setExercises((oldstate) => [
+			...oldstate,
+			{ exercise: exercise, sets: 4, repRange: '8-12' },
+		]);
+		setAddedExercises((oldstate) => [...oldstate, exercise]);
+	};
 
+	const handleCreateWorkout = () => {
+		setWorkout((oldstate) => ({
+			...oldstate,
+			targetMuscles: selectedMuscleGroups,
+			exercises: exercises,
+			path: workoutNameToPathConverter('hej'),
+		}));
+		console.log(workout);
+	};
+
+	// console.log(exercises);
+	// console.log(workout);
 	return (
 		<Page title="Skapa pass">
 			<TitleHeader title="Skapa pass" navigateBackButton navigateTo="back" />
@@ -78,7 +130,7 @@ export const CreateWorkoutPage = () => {
 					<Typography variant="subtitle1" className={classes.label}>
 						Namn
 					</Typography>
-					<StyledTextField fullWidth />
+					<StyledTextField fullWidth onChange={handleSetName} />
 				</Grid>
 				<Grid item>
 					<Typography variant="subtitle1" className={classes.label}>
@@ -90,9 +142,6 @@ export const CreateWorkoutPage = () => {
 							className={classes.select}
 							placeholder="Välj"
 							onChange={handleSelect}
-							// value={selectedMuscleGroups}
-							// multiple
-							// renderValue={(selected: any) => selected.join(', ')}
 							IconComponent={() => <ExpandMoreRounded />}
 							MenuProps={{
 								classes: { paper: classes.selectMenu },
@@ -101,7 +150,6 @@ export const CreateWorkoutPage = () => {
 							{muscleGroups.map((muscleGroup) => (
 								<MenuItem value={muscleGroup} className={classes.menuItem}>
 									{muscleGroup}
-									{/* <Checkbox /> */}
 								</MenuItem>
 							))}
 						</Select>
@@ -141,6 +189,8 @@ export const CreateWorkoutPage = () => {
 						placeholder="Sök"
 						icon={{ element: <SearchRounded />, position: 'start' }}
 						onChange={handleChange}
+						onBlur={handleBlur}
+						value={value}
 					/>
 					{searchResults.length > 0 && (
 						<Box className={classes.searchResultsContainer}>
@@ -161,7 +211,10 @@ export const CreateWorkoutPage = () => {
 											{exercise.targetMuscles[0]}
 										</Typography>
 									</Grid>
-									<IconButton className={classes.searchResultAddIconButton}>
+									<IconButton
+										className={classes.searchResultAddIconButton}
+										onClick={() => handleAddExercise(exercise)}
+									>
 										<AddRounded
 											className={classes.searchResultIcon}
 											fontSize="small"
@@ -171,6 +224,37 @@ export const CreateWorkoutPage = () => {
 							))}
 						</Box>
 					)}
+					<Grid item container className={classes.exerciseListContainer}>
+						{exercises.length > 0 && (
+							<Grid item container className={classes.exerciseListHeader}>
+								<Typography
+									variant="body2"
+									className={classes.exerciseListHeaderSets}
+								>
+									Set
+								</Typography>
+								<Typography
+									variant="body2"
+									className={classes.exerciseListHeaderReps}
+								>
+									Reps
+								</Typography>
+							</Grid>
+						)}
+						{exercises.map((exercise, index) => (
+							<ExerciseToAdd exercise={addedExercises[index]} />
+						))}
+					</Grid>
+					<Button
+						disabled={exercises.length === 0}
+						variant="contained"
+						color="primary"
+						className={classes.confirmButton}
+						onClick={handleCreateWorkout}
+						fullWidth
+					>
+						Bekräfta
+					</Button>
 				</Grid>
 			</Grid>
 		</Page>

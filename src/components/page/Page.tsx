@@ -13,7 +13,7 @@ export const Page = ({ children, title }: IPage) => {
 	const classes = useStyles();
 	SetPageTitle(title);
 	return (
-		<Grid container className={classes.root}>
+		<Grid item container direction="column" className={classes.root}>
 			{children}
 		</Grid>
 	);

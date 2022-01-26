@@ -88,13 +88,13 @@ export default makeStyles((theme) => ({
 	},
 	exercisesContainer: {
 		position: 'relative',
-		marginBottom: 200,
 	},
 	searchResultsContainer: {
 		position: 'absolute',
 		left: 0,
 		right: 0,
 		top: 54,
+		zIndex: 10,
 		height: 'fit-content',
 		backgroundColor: theme.palette.secondary.light,
 		borderRadius: 10,
@@ -121,5 +121,35 @@ export default makeStyles((theme) => ({
 	},
 	searchResultIcon: {
 		color: theme.palette.common.white,
+	},
+	exerciseListContainer: {
+		marginTop: 10,
+		position: 'relative',
+	},
+	exerciseListHeader: {
+		marginBottom: 24,
+	},
+	exerciseListHeaderSets: {
+		position: 'absolute',
+		top: 0,
+		right: 81,
+	},
+	exerciseListHeaderReps: {
+		position: 'absolute',
+		top: 0,
+		right: 11,
+	},
+	confirmButton: {
+		borderRadius: 20,
+		marginTop: 20,
+		paddingTop: 8,
+		paddingBottom: 8,
+		'&.MuiButton-contained.Mui-disabled': {
+			backgroundColor: theme.palette.grey[800],
+			color: theme.palette.grey[600],
+		},
+		'&.MuiButton-contained.Mui-disabled > span': {
+			color: theme.palette.grey[600],
+		},
 	},
 }));
