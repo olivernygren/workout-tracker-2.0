@@ -7,7 +7,6 @@ import {
 	Button,
 	Box,
 	IconButton,
-	Checkbox,
 	Chip,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
@@ -68,9 +67,7 @@ export const CreateWorkoutPage = () => {
 
 	return (
 		<Page title="Skapa pass">
-			<Grid item container direction="column">
-				<TitleHeader title="Skapa pass" navigateBackButton navigateTo="back" />
-			</Grid>
+			<TitleHeader title="Skapa pass" navigateBackButton navigateTo="back" />
 			<Grid
 				item
 				container
