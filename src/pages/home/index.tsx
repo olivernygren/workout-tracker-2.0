@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { HomeCard, HomeWorkoutCard, Page, TitleHeader } from '../../components';
-import { homePageCards } from '../../utils';
+import { getNumberOfSets, homePageCards, workouts } from '../../utils';
 
 export const HomePage = () => {
 	const classes = useStyles();
@@ -29,18 +29,21 @@ export const HomePage = () => {
 			<Grid item container direction="column">
 				<TitleHeader title="Dina pass" button={<HeaderButton />} />
 				<Grid item container className={classes.workoutCardContainer}>
-					<HomeWorkoutCard
-						name="Chest &amp; Biceps 1"
-						exercises={5}
-						sets={20}
-					/>
-					<HomeWorkoutCard name="Legs 1" exercises={5} sets={20} />
+					{workouts.map((workout) => (
+						<HomeWorkoutCard
+							name={workout.name}
+							exercises={workout.exercises.length}
+							sets={getNumberOfSets(workout)}
+							key={workout.name}
+						/>
+					))}
+					{/* <HomeWorkoutCard name="Legs 1" exercises={5} sets={20} />
 					<HomeWorkoutCard
 						name="Shoulders &amp; Triceps 1"
 						exercises={5}
 						sets={20}
 					/>
-					<HomeWorkoutCard name="Back 1" exercises={5} sets={20} />
+					<HomeWorkoutCard name="Back 1" exercises={5} sets={20} /> */}
 				</Grid>
 				<Grid item container className={classes.cardContainer}>
 					{homePageCards.map((card) => (

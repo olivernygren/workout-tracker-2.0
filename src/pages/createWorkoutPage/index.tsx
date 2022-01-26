@@ -7,13 +7,19 @@ import {
 	Button,
 	Box,
 	IconButton,
+	Checkbox,
+	Chip,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
 import { exerciseDatabase, muscleGroups } from '../../utils';
-import { AddRounded, SearchRounded } from '@material-ui/icons';
+import {
+	AddRounded,
+	ExpandMoreRounded,
+	SearchRounded,
+} from '@material-ui/icons';
 import { useState } from 'react';
 import { Exercise } from '../../types';
 
@@ -21,6 +27,9 @@ export const CreateWorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
 	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
+		[]
+	);
 
 	const handleNavigate = () => {
 		navigateTo('/add-exercises');
@@ -45,7 +54,17 @@ export const CreateWorkoutPage = () => {
 		searchFunction(event.target.value);
 	};
 
+	const handleSelect = (event: any) => {
+		setSelectedMuscleGroups((oldstate) => [...oldstate, event.target.value]);
+	};
+
+	const handleDelete = (muscleGroup: string) => {
+		console.log('deteted ' + muscleGroup);
+		// hitta musclegroup i selectedmusclegroups array med .find och ta bort
+	};
+
 	// onBlur setSearchResults([])
+	console.log(selectedMuscleGroups);
 
 	return (
 		<Page title="Skapa pass">
@@ -73,14 +92,32 @@ export const CreateWorkoutPage = () => {
 							id="demo-simple-select"
 							className={classes.select}
 							placeholder="Välj"
+							onChange={handleSelect}
+							// value={selectedMuscleGroups}
+							// multiple
+							// renderValue={(selected: any) => selected.join(', ')}
+							IconComponent={() => <ExpandMoreRounded />}
+							MenuProps={{
+								classes: { paper: classes.selectMenu },
+							}}
 						>
 							{muscleGroups.map((muscleGroup) => (
 								<MenuItem value={muscleGroup} className={classes.menuItem}>
 									{muscleGroup}
+									{/* <Checkbox /> */}
 								</MenuItem>
 							))}
 						</Select>
 					</FormControl>
+					<Grid item container className={classes.chipContainer}>
+						{selectedMuscleGroups.map((mg) => (
+							<Chip
+								label={mg}
+								className={classes.chip}
+								onDelete={() => handleDelete(mg)}
+							/>
+						))}
+					</Grid>
 				</Grid>
 				<Grid item container className={classes.exercisesHeader}>
 					<Typography variant="h5" className={classes.label}>

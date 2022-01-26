@@ -19,11 +19,3 @@ button > .MuiButton-label {
   color: white
 }
 
-.MuiMenu-paper > ul {
-  background-color: #474747;
-  padding: 0;
-  /* border-radius: 12; */
-}
-/* .MuiMenu-paper {
-  border-radius: 12;
-} */

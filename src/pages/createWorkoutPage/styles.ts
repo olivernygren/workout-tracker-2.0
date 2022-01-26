@@ -36,17 +36,25 @@ export default makeStyles((theme) => ({
 		},
 		'&.MuiInput-underline:before': {
 			borderBottom: 'none',
+			opacity: 0,
 		},
 		'& > svg': {
 			color: theme.palette.common.white,
-			marginRight: 5,
 		},
+	},
+	selectMenu: {
+		backgroundColor: '#474747',
+		padding: 0,
+		borderRadius: 10,
+		maxHeight: 200,
+		width: '100%',
+		marginTop: 60,
 	},
 	menuItem: {
 		color: theme.palette.common.white,
 		paddingTop: 0,
 		paddingBottom: 0,
-		minHeight: 38,
+		minHeight: 34,
 		'&:first-of-type': {
 			paddingTop: 8,
 			paddingBottom: 4,
@@ -54,6 +62,23 @@ export default makeStyles((theme) => ({
 		'&:last-of-type': {
 			paddingTop: 4,
 			paddingBottom: 8,
+		},
+	},
+	chipContainer: {
+		margin: '8px 0 0 0',
+	},
+	chip: {
+		paddingTop: 4,
+		paddingBottom: 4,
+		marginRight: 6,
+		height: 25,
+		backgroundColor: theme.palette.secondary.light,
+		color: theme.palette.common.white,
+		'& > svg': {
+			color: theme.palette.grey[600],
+			width: 18,
+			height: 18,
+			marginRight: 4,
 		},
 	},
 	exercisesHeader: {
