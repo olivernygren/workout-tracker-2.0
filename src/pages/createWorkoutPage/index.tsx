@@ -22,6 +22,7 @@ import {
 	exerciseDatabase,
 	muscleGroups,
 	workoutNameToPathConverter,
+	workouts,
 } from '../../utils';
 import {
 	AddRounded,
@@ -39,15 +40,23 @@ export const CreateWorkoutPage = () => {
 		[]
 	);
 	const [addedExercises, setAddedExercises] = useState<Exercise[]>([]);
-	const [exercises, setExercises] = useState<ExerciseInstance[]>([]);
+	const [exercisesList, setExercisesList] = useState<ExerciseInstance[]>([]);
+	const [finalExercises] = useState<ExerciseInstance[]>([]);
 	const [value, setValue] = useState('');
+	const [childData, setChildData] = useState<ExerciseInstance[]>([
+		{
+			exercise: { name: '', targetMuscles: [] },
+			sets: 0,
+			repRange: '',
+			RIR: undefined,
+		},
+	]);
 	const [workout, setWorkout] = useState<Workout>({
 		name: '',
 		exercises: [],
 		targetMuscles: [],
 		path: '',
 	});
-	// let selectedMuscleGroups: string[] = [];
 
 	const handleNavigate = () => {
 		navigateTo('/add-exercises');
@@ -85,11 +94,11 @@ export const CreateWorkoutPage = () => {
 		}, 50);
 	};
 
-	const handleSelect = (event: any) => {
+	const handleSelectMuscleGroup = (event: any) => {
 		setSelectedMuscleGroups((oldstate) => [...oldstate, event.target.value]);
 	};
 
-	const handleDelete = (muscleGroup: string) => {
+	const handleDeleteMuscleGroup = (muscleGroup: string) => {
 		const filteredArray = selectedMuscleGroups.filter(
 			(mg) => mg !== muscleGroup
 		);
@@ -98,7 +107,7 @@ export const CreateWorkoutPage = () => {
 
 	const handleAddExercise = (exercise: Exercise) => {
 		setValue('');
-		setExercises((oldstate) => [
+		setExercisesList((oldstate) => [
 			...oldstate,
 			{ exercise: exercise, sets: 4, repRange: '8-12' },
 		]);
@@ -109,14 +118,53 @@ export const CreateWorkoutPage = () => {
 		setWorkout((oldstate) => ({
 			...oldstate,
 			targetMuscles: selectedMuscleGroups,
-			exercises: exercises,
+			exercises: finalExercises,
 			path: workoutNameToPathConverter('hej'),
 		}));
-		console.log(workout);
 	};
 
-	// console.log(exercises);
-	// console.log(workout);
+	const handleUpdateSets = (
+		exerciseInstance: ExerciseInstance,
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		const exerciseInstanceObject = exercisesList.find(
+			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
+		)!;
+		const withSets = {
+			...exerciseInstanceObject,
+			sets: parseInt(event.target.value),
+		};
+		finalExercises.push(withSets);
+	};
+
+	const handleUpdateReps = (
+		exerciseInstance: ExerciseInstance,
+		event: React.ChangeEvent<HTMLInputElement>
+	) => {
+		// find exercise in list to add reps to
+		const exerciseObject = finalExercises.find(
+			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
+		)!;
+		// find index of exercise in list to add reps to
+		const exerciseObjectIndex = finalExercises.findIndex(
+			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
+		)!;
+		// change the repRange of the object
+		const withReps = { ...exerciseObject, repRange: event.target.value };
+		// replace the object of name and sets with the reps included object
+		finalExercises.splice(exerciseObjectIndex, 1, withReps);
+	};
+
+	if (workout.exercises.length > 0) {
+		const nameArray: string[] = [];
+		workouts.forEach((w) => {
+			nameArray.push(w.name);
+		});
+		if (!nameArray.includes(workout.name)) {
+			workouts.push(workout);
+		}
+	}
+
 	return (
 		<Page title="Skapa pass">
 			<TitleHeader title="Skapa pass" navigateBackButton navigateTo="back" />
@@ -133,7 +181,10 @@ export const CreateWorkoutPage = () => {
 					<StyledTextField fullWidth onChange={handleSetName} />
 				</Grid>
 				<Grid item>
-					<Typography variant="subtitle1" className={classes.label}>
+					<Typography
+						variant="subtitle1"
+						className={`${classes.label} ${classes.marginTop}`}
+					>
 						Muskelgrupper
 					</Typography>
 					<FormControl fullWidth>
@@ -141,7 +192,7 @@ export const CreateWorkoutPage = () => {
 							id="demo-simple-select"
 							className={classes.select}
 							placeholder="Välj"
-							onChange={handleSelect}
+							onChange={handleSelectMuscleGroup}
 							IconComponent={() => <ExpandMoreRounded />}
 							MenuProps={{
 								classes: { paper: classes.selectMenu },
@@ -159,7 +210,7 @@ export const CreateWorkoutPage = () => {
 							<Chip
 								label={mg}
 								className={classes.chip}
-								onDelete={() => handleDelete(mg)}
+								onDelete={() => handleDeleteMuscleGroup(mg)}
 							/>
 						))}
 					</Grid>
@@ -225,7 +276,7 @@ export const CreateWorkoutPage = () => {
 						</Box>
 					)}
 					<Grid item container className={classes.exerciseListContainer}>
-						{exercises.length > 0 && (
+						{exercisesList.length > 0 && (
 							<Grid item container className={classes.exerciseListHeader}>
 								<Typography
 									variant="body2"
@@ -241,12 +292,35 @@ export const CreateWorkoutPage = () => {
 								</Typography>
 							</Grid>
 						)}
-						{exercises.map((exercise, index) => (
-							<ExerciseToAdd exercise={addedExercises[index]} />
+						{exercisesList.map((exercise, index) => (
+							<Grid item container className={classes.exerciseToAddContainer}>
+								<Typography variant="body1">
+									{exercise.exercise.name}
+								</Typography>
+								<Grid
+									item
+									container
+									className={classes.exerciseToAddInputContainer}
+								>
+									<StyledTextField
+										tiny
+										// value={setsValue}
+										onChange={(event) => handleUpdateSets(exercise, event)}
+									/>
+									<Typography variant="body1" className={classes.xSign}>
+										×
+									</Typography>
+									<StyledTextField
+										small
+										// value={repsValue}
+										onChange={(event) => handleUpdateReps(exercise, event)}
+									/>
+								</Grid>
+							</Grid>
 						))}
 					</Grid>
 					<Button
-						disabled={exercises.length === 0}
+						disabled={exercisesList.length === 0}
 						variant="contained"
 						color="primary"
 						className={classes.confirmButton}

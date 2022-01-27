@@ -26,6 +26,9 @@ export default makeStyles((theme) => ({
 		marginBottom: 2,
 		marginLeft: 2,
 	},
+	marginTop: {
+		marginTop: 16,
+	},
 	select: {
 		borderRadius: 10,
 		padding: '9px 10px',
@@ -151,5 +154,18 @@ export default makeStyles((theme) => ({
 		'&.MuiButton-contained.Mui-disabled > span': {
 			color: theme.palette.grey[600],
 		},
+	},
+	exerciseToAddContainer: {
+		padding: '5px 0',
+		marginBottom: 2,
+		alignItems: 'center',
+		justifyContent: 'space-between',
+		flexWrap: 'nowrap',
+	},
+	exerciseToAddInputContainer: {
+		width: 'fit-content',
+	},
+	xSign: {
+		margin: '0 10px',
 	},
 }));
