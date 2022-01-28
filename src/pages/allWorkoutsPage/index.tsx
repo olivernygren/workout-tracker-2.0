@@ -39,7 +39,7 @@ export const AllWorkoutsPage = () => {
 				<TitleHeader
 					title="Alla pass"
 					navigateBackButton
-					navigateTo="back"
+					navigateTo="/"
 					button={<HeaderButton />}
 				/>
 			</Grid>

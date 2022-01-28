@@ -8,59 +8,55 @@ import {
 	Box,
 	IconButton,
 	Chip,
+	Modal,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-
-import useStyles from './styles';
-import {
-	ExerciseToAdd,
-	Page,
-	StyledTextField,
-	TitleHeader,
-} from '../../components';
-import {
-	exerciseDatabase,
-	muscleGroups,
-	workoutNameToPathConverter,
-	workouts,
-} from '../../utils';
 import {
 	AddRounded,
 	ExpandMoreRounded,
 	SearchRounded,
 } from '@material-ui/icons';
 import { useState } from 'react';
+
+import useStyles from './styles';
+import { Page, StyledTextField, TitleHeader } from '../../components';
+import {
+	exerciseDatabase,
+	muscleGroups,
+	workoutNameToPathConverter,
+	workouts,
+} from '../../utils';
 import { Exercise, ExerciseInstance, Workout } from '../../types';
 
 export const CreateWorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
+	const defualtExerciseInstance = {
+		exercise: { name: '', targetMuscles: [] },
+		sets: 0,
+		repRange: '',
+		RIR: undefined,
+	};
+
 	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
 	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
 		[]
 	);
-	const [addedExercises, setAddedExercises] = useState<Exercise[]>([]);
-	const [exercisesList, setExercisesList] = useState<ExerciseInstance[]>([]);
-	const [finalExercises] = useState<ExerciseInstance[]>([]);
-	const [value, setValue] = useState('');
-	const [childData, setChildData] = useState<ExerciseInstance[]>([
-		{
-			exercise: { name: '', targetMuscles: [] },
-			sets: 0,
-			repRange: '',
-			RIR: undefined,
-		},
-	]);
+	const [workoutName, setWorkoutName] = useState('');
+	const [exercisesList] = useState<ExerciseInstance[]>([]);
+	const [searchValue, setSearchValue] = useState('');
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [modalErrorMessage, setModalErrorMessage] = useState('');
+	const [createErrorMessage, setCreateErrorMessage] = useState('');
+	const [exerciseToAdd, setExerciseToAdd] = useState<ExerciseInstance>(
+		defualtExerciseInstance
+	);
 	const [workout, setWorkout] = useState<Workout>({
 		name: '',
 		exercises: [],
 		targetMuscles: [],
 		path: '',
 	});
-
-	const handleNavigate = () => {
-		navigateTo('/add-exercises');
-	};
 
 	const searchFunction = (text: string) => {
 		const searchArr = exerciseDatabase.filter((exercise: Exercise) => {
@@ -77,11 +73,12 @@ export const CreateWorkoutPage = () => {
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		setValue(event.target.value);
+		setSearchValue(event.target.value);
 		searchFunction(event.target.value);
 	};
 
 	const handleSetName = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setWorkoutName(event.target.value);
 		setWorkout((oldstate) => ({
 			...oldstate,
 			name: event.target.value,
@@ -99,70 +96,83 @@ export const CreateWorkoutPage = () => {
 	};
 
 	const handleDeleteMuscleGroup = (muscleGroup: string) => {
+		// filter out the item of the array that is equal to muscleGroup
 		const filteredArray = selectedMuscleGroups.filter(
 			(mg) => mg !== muscleGroup
 		);
 		setSelectedMuscleGroups(filteredArray);
 	};
 
-	const handleAddExercise = (exercise: Exercise) => {
-		setValue('');
-		setExercisesList((oldstate) => [
-			...oldstate,
-			{ exercise: exercise, sets: 4, repRange: '8-12' },
-		]);
-		setAddedExercises((oldstate) => [...oldstate, exercise]);
+	const handleSetModal = () => {
+		setIsModalOpen(!isModalOpen);
 	};
 
-	const handleCreateWorkout = () => {
-		setWorkout((oldstate) => ({
+	const handleSetActiveExercise = (exercise: Exercise) => {
+		setExerciseToAdd((oldstate) => ({
 			...oldstate,
-			targetMuscles: selectedMuscleGroups,
-			exercises: finalExercises,
-			path: workoutNameToPathConverter('hej'),
+			exercise: { name: exercise.name, targetMuscles: exercise.targetMuscles },
+		}));
+		setSearchValue('');
+		handleSetModal();
+	};
+
+	const handleUpdateSets = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setExerciseToAdd((oldstate) => ({
+			...oldstate,
+			sets: parseInt(event.target.value),
 		}));
 	};
 
-	const handleUpdateSets = (
-		exerciseInstance: ExerciseInstance,
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		const exerciseInstanceObject = exercisesList.find(
-			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
-		)!;
-		const withSets = {
-			...exerciseInstanceObject,
-			sets: parseInt(event.target.value),
-		};
-		finalExercises.push(withSets);
+	const handleUpdateReps = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setExerciseToAdd((oldstate) => ({
+			...oldstate,
+			repRange: event.target.value,
+		}));
 	};
 
-	const handleUpdateReps = (
-		exerciseInstance: ExerciseInstance,
-		event: React.ChangeEvent<HTMLInputElement>
-	) => {
-		// find exercise in list to add reps to
-		const exerciseObject = finalExercises.find(
-			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
-		)!;
-		// find index of exercise in list to add reps to
-		const exerciseObjectIndex = finalExercises.findIndex(
-			(exercise) => exercise.exercise.name === exerciseInstance.exercise.name
-		)!;
-		// change the repRange of the object
-		const withReps = { ...exerciseObject, repRange: event.target.value };
-		// replace the object of name and sets with the reps included object
-		finalExercises.splice(exerciseObjectIndex, 1, withReps);
+	const handleAddExerciseToList = () => {
+		if (exerciseToAdd.sets === 0 || exerciseToAdd.repRange === '') {
+			setModalErrorMessage('Fyll i fälten');
+			return;
+		} else {
+			setModalErrorMessage('');
+		}
+		exercisesList.push(exerciseToAdd);
+		setIsModalOpen(false);
+		setExerciseToAdd(defualtExerciseInstance);
 	};
 
-	if (workout.exercises.length > 0) {
-		const nameArray: string[] = [];
-		workouts.forEach((w) => {
-			nameArray.push(w.name);
+	const handleCreateWorkout = () => {
+		if (workoutName === '' || selectedMuscleGroups.length === 0) {
+			setCreateErrorMessage('Fyll i namn och muskelgrupper');
+			return;
+		}
+		setWorkout({
+			name: workoutName,
+			exercises: exercisesList,
+			targetMuscles: selectedMuscleGroups,
+			path: workoutNameToPathConverter(workoutName),
 		});
-		if (!nameArray.includes(workout.name)) {
+	};
+
+	// Detect if workout has been set to valid, then validate and push
+	if (workout.exercises.length > 0) {
+		//prevent duplicates of same workout
+		const workoutNameArray: string[] = [];
+		workouts.forEach((w) => {
+			workoutNameArray.push(w.name);
+		});
+		if (!workoutNameArray.includes(workout.name)) {
 			workouts.push(workout);
 		}
+		//reset workout state after pushing
+		setWorkout({
+			name: '',
+			exercises: [],
+			targetMuscles: [],
+			path: '',
+		});
+		navigateTo('/all-workouts');
 	}
 
 	return (
@@ -219,16 +229,16 @@ export const CreateWorkoutPage = () => {
 					<Typography variant="h5" className={classes.label}>
 						Övningar
 					</Typography>
-					<Button
+					{/* <Button
 						endIcon={<AddRounded />}
 						className={classes.headerButton}
 						disableElevation
 						color="primary"
 						variant="contained"
-						onClick={handleNavigate}
+						onClick={handleSetModal}
 					>
 						Lägg till
-					</Button>
+					</Button> */}
 				</Grid>
 				<Grid
 					container
@@ -241,7 +251,7 @@ export const CreateWorkoutPage = () => {
 						icon={{ element: <SearchRounded />, position: 'start' }}
 						onChange={handleChange}
 						onBlur={handleBlur}
-						value={value}
+						value={searchValue}
 					/>
 					{searchResults.length > 0 && (
 						<Box className={classes.searchResultsContainer}>
@@ -264,7 +274,7 @@ export const CreateWorkoutPage = () => {
 									</Grid>
 									<IconButton
 										className={classes.searchResultAddIconButton}
-										onClick={() => handleAddExercise(exercise)}
+										onClick={() => handleSetActiveExercise(exercise)}
 									>
 										<AddRounded
 											className={classes.searchResultIcon}
@@ -276,23 +286,7 @@ export const CreateWorkoutPage = () => {
 						</Box>
 					)}
 					<Grid item container className={classes.exerciseListContainer}>
-						{exercisesList.length > 0 && (
-							<Grid item container className={classes.exerciseListHeader}>
-								<Typography
-									variant="body2"
-									className={classes.exerciseListHeaderSets}
-								>
-									Set
-								</Typography>
-								<Typography
-									variant="body2"
-									className={classes.exerciseListHeaderReps}
-								>
-									Reps
-								</Typography>
-							</Grid>
-						)}
-						{exercisesList.map((exercise, index) => (
+						{exercisesList.map((exercise) => (
 							<Grid item container className={classes.exerciseToAddContainer}>
 								<Typography variant="body1">
 									{exercise.exercise.name}
@@ -302,23 +296,18 @@ export const CreateWorkoutPage = () => {
 									container
 									className={classes.exerciseToAddInputContainer}
 								>
-									<StyledTextField
-										tiny
-										// value={setsValue}
-										onChange={(event) => handleUpdateSets(exercise, event)}
-									/>
-									<Typography variant="body1" className={classes.xSign}>
+									<Typography variant="body1">{exercise.sets}</Typography>
+									<Typography variant="body1" className={classes.xSignList}>
 										×
 									</Typography>
-									<StyledTextField
-										small
-										// value={repsValue}
-										onChange={(event) => handleUpdateReps(exercise, event)}
-									/>
+									<Typography variant="body1">{exercise.repRange}</Typography>
 								</Grid>
 							</Grid>
 						))}
 					</Grid>
+					<Typography variant="body1" className={classes.modalErrorText}>
+						{createErrorMessage}
+					</Typography>
 					<Button
 						disabled={exercisesList.length === 0}
 						variant="contained"
@@ -331,6 +320,51 @@ export const CreateWorkoutPage = () => {
 					</Button>
 				</Grid>
 			</Grid>
+			{isModalOpen && (
+				<Modal
+					open={isModalOpen}
+					onClose={handleSetModal}
+					className={classes.modalContainer}
+				>
+					<Box>
+						<Grid
+							item
+							container
+							direction="column"
+							className={classes.modalContentContainer}
+						>
+							<Typography variant="h6" className={classes.modalExerciseName}>
+								{exerciseToAdd.exercise.name}
+							</Typography>
+							<Grid item container className={classes.modalTextFieldContainer}>
+								<StyledTextField
+									placeholder="Sets"
+									onChange={(event) => handleUpdateSets(event)}
+								/>
+								<Typography variant="body1" className={classes.xSign}>
+									×
+								</Typography>
+								<StyledTextField
+									placeholder="Reps"
+									onChange={(event) => handleUpdateReps(event)}
+								/>
+							</Grid>
+							<Typography variant="body1" className={classes.modalErrorText}>
+								{modalErrorMessage}
+							</Typography>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classes.addExerciseButton}
+								onClick={handleAddExerciseToList}
+								fullWidth
+							>
+								Lägg till
+							</Button>
+						</Grid>
+					</Box>
+				</Modal>
+			)}
 		</Page>
 	);
 };

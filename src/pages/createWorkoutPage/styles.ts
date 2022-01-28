@@ -144,6 +144,23 @@ export default makeStyles((theme) => ({
 	},
 	confirmButton: {
 		borderRadius: 20,
+		position: 'fixed',
+		bottom: 20,
+		width: 'calc(100% - 32px)',
+		// marginTop: 20,
+		// alignSelf: 'end',
+		paddingTop: 8,
+		paddingBottom: 8,
+		'&.MuiButton-contained.Mui-disabled': {
+			backgroundColor: theme.palette.grey[800],
+			color: theme.palette.grey[600],
+		},
+		'&.MuiButton-contained.Mui-disabled > span': {
+			color: theme.palette.grey[600],
+		},
+	},
+	addExerciseButton: {
+		borderRadius: 20,
 		marginTop: 20,
 		paddingTop: 8,
 		paddingBottom: 8,
@@ -166,6 +183,39 @@ export default makeStyles((theme) => ({
 		width: 'fit-content',
 	},
 	xSign: {
+		margin: '0 20px',
+	},
+	xSignList: {
 		margin: '0 10px',
+	},
+	modalContainer: {
+		// position: 'absolute',
+		// top: '50%',
+		// left: '50%',
+		// transform: 'translate(-50%, -50%)',
+		// width: 400,
+		// backgroundColor: theme.palette.common.white,
+		display: 'flex',
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	modalContentContainer: {
+		backgroundColor: theme.palette.secondary.dark,
+		width: 'calc(100vw - 32px)',
+		padding: 20,
+		borderRadius: 10,
+		// border: '2px solid grey',
+	},
+	modalTextFieldContainer: {
+		flex: 1,
+		flexWrap: 'nowrap',
+		alignItems: 'center',
+	},
+	modalExerciseName: {
+		marginBottom: 20,
+	},
+	modalErrorText: {
+		color: theme.palette.error.main,
+		marginTop: 10,
 	},
 }));

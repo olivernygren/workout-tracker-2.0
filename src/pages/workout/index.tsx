@@ -37,8 +37,11 @@ export const WorkoutPage = () => {
 	};
 
 	const workoutObject = workouts.find(
-		(workout) => workout.name === workoutNameFromPath
+		(workout) =>
+			workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
 	);
+
+	console.log(workoutObject);
 
 	return (
 		<Page title={workoutNameFromPath}>
