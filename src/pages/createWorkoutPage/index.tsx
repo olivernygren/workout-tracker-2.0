@@ -11,11 +11,7 @@ import {
 	Modal,
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
-import {
-	AddRounded,
-	ExpandMoreRounded,
-	SearchRounded,
-} from '@material-ui/icons';
+import { AddRounded, SearchRounded } from '@material-ui/icons';
 import { useState } from 'react';
 
 import useStyles from './styles';
