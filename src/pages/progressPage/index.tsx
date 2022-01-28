@@ -1,6 +1,5 @@
-import { Grid, Button, Typography, IconButton, Box } from '@material-ui/core';
-import { AddRounded, SearchRounded } from '@material-ui/icons';
-import { useNavigate } from 'react-router-dom';
+import { Grid, Typography } from '@material-ui/core';
+import { SearchRounded } from '@material-ui/icons';
 
 import useStyles from './styles';
 import {
@@ -15,27 +14,22 @@ import { useState } from 'react';
 
 export const ProgressPage = () => {
 	const classes = useStyles();
-	const navigateTo = useNavigate();
 
 	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
 	const [searchValue, setSearchValue] = useState('');
 
-	const HeaderButton = () => (
-		<Button
-			endIcon={<AddRounded />}
-			className={classes.headerButton}
-			color="primary"
-			disableElevation
-			variant="contained"
-			onClick={handleNavigate}
-		>
-			Knapp
-		</Button>
-	);
-
-	const handleNavigate = () => {
-		navigateTo('/link');
-	};
+	// const HeaderButton = () => (
+	// 	<Button
+	// 		endIcon={<AddRounded />}
+	// 		className={classes.headerButton}
+	// 		color="primary"
+	// 		disableElevation
+	// 		variant="contained"
+	// 		onClick={handleNavigate}
+	// 	>
+	// 		Knapp
+	// 	</Button>
+	// );
 
 	const searchFunction = (text: string) => {
 		const searchArr = exerciseDatabase.filter((exercise: Exercise) => {
@@ -62,6 +56,69 @@ export const ProgressPage = () => {
 		}, 50);
 	};
 
+	const SearchResultsComponent = () => {
+		return (
+			<Grid
+				item
+				container
+				direction="column"
+				className={classes.exercisesContainer}
+			>
+				<Typography
+					variant="subtitle1"
+					className={classes.exerciseListTextHeader}
+				>
+					Sökresultat:
+				</Typography>
+				{searchResults.map((exercise) => (
+					<ExerciseProgressCard exercise={exercise.name} />
+				))}
+			</Grid>
+		);
+	};
+
+	const NoSearchResults = () => {
+		return (
+			<Grid
+				item
+				container
+				direction="column"
+				className={classes.exercisesContainer}
+			>
+				<Typography
+					variant="subtitle1"
+					className={classes.exerciseListTextHeader}
+				>
+					Inga sökresultat
+				</Typography>
+				{searchResults.map((exercise) => (
+					<ExerciseProgressCard exercise={exercise.name} />
+				))}
+			</Grid>
+		);
+	};
+
+	const ExerciseList = () => {
+		return (
+			<Grid
+				item
+				container
+				direction="column"
+				className={classes.exercisesContainer}
+			>
+				<Typography
+					variant="subtitle1"
+					className={classes.exerciseListTextHeader}
+				>
+					Alla:
+				</Typography>
+				{exerciseDatabase.map((exercise) => (
+					<ExerciseProgressCard exercise={exercise.name} />
+				))}
+			</Grid>
+		);
+	};
+
 	return (
 		<Page title="Progress">
 			<Grid item container direction="column">
@@ -69,57 +126,29 @@ export const ProgressPage = () => {
 					title="Progress"
 					navigateBackButton
 					navigateTo="/"
-					button={<HeaderButton />}
+					// button={<HeaderButton />}
 				/>
 			</Grid>
-			<StyledTextField
-				placeholder="Sök"
-				icon={{ element: <SearchRounded />, position: 'start' }}
-				onChange={handleChange}
-				onBlur={handleBlur}
-				value={searchValue}
-			/>
-			{searchResults.length > 0 && (
-				<Box className={classes.searchResultsContainer}>
-					{searchResults.map((exercise) => (
-						<Grid item container className={classes.searchResult}>
-							<Grid item container>
-								<Typography variant="body1">{exercise.name}</Typography>
-								<Typography
-									variant="body1"
-									className={classes.searchResultSeparator}
-								>
-									/
-								</Typography>
-								<Typography
-									variant="body2"
-									className={classes.searchResultTargetMuscle}
-								>
-									{exercise.targetMuscles[0]}
-								</Typography>
-							</Grid>
-							<IconButton
-								className={classes.searchResultAddIconButton}
-								// onClick={() => handleSetActiveExercise(exercise)}
-							>
-								<AddRounded
-									className={classes.searchResultIcon}
-									fontSize="small"
-								/>
-							</IconButton>
-						</Grid>
-					))}
-				</Box>
-			)}
 			<Grid
 				item
 				container
 				direction="column"
-				className={classes.exercisesContainer}
+				className={classes.searchBarContainer}
 			>
-				{exerciseDatabase.map((exercise) => (
-					<ExerciseProgressCard exercise={exercise.name} />
-				))}
+				<StyledTextField
+					placeholder="Sök"
+					icon={{ element: <SearchRounded />, position: 'start' }}
+					onChange={handleChange}
+					onBlur={handleBlur}
+					value={searchValue}
+				/>
+				{searchResults.length > 0 ? (
+					<SearchResultsComponent />
+				) : searchResults.length === 0 && searchValue !== '' ? (
+					<NoSearchResults />
+				) : (
+					<ExerciseList />
+				)}
 			</Grid>
 		</Page>
 	);

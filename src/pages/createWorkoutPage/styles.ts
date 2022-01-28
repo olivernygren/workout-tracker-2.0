@@ -191,12 +191,6 @@ export default makeStyles((theme) => ({
 		margin: '0 10px',
 	},
 	modalContainer: {
-		// position: 'absolute',
-		// top: '50%',
-		// left: '50%',
-		// transform: 'translate(-50%, -50%)',
-		// width: 400,
-		// backgroundColor: theme.palette.common.white,
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -206,7 +200,7 @@ export default makeStyles((theme) => ({
 		width: 'calc(100vw - 32px)',
 		padding: 20,
 		borderRadius: 10,
-		// border: '2px solid grey',
+		boxShadow: '0px 0px 15px 2px #101010',
 	},
 	modalTextFieldContainer: {
 		flex: 1,

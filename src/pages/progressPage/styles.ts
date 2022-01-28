@@ -9,7 +9,10 @@ export default makeStyles((theme) => ({
 		alignSelf: 'center',
 	},
 	exercisesContainer: {
-		marginTop: 30,
+		marginTop: 24,
+	},
+	exerciseListTextHeader: {
+		marginBottom: 10,
 	},
 	searchResultsContainer: {
 		position: 'absolute',
@@ -43,5 +46,9 @@ export default makeStyles((theme) => ({
 	},
 	searchResultIcon: {
 		color: theme.palette.common.white,
+	},
+	searchBarContainer: {
+		marginTop: 24,
+		position: 'relative',
 	},
 }));

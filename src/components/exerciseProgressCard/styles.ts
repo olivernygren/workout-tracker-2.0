@@ -3,19 +3,20 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles((theme) => ({
 	container: {
 		backgroundImage: theme.palette.gradient.gradient,
-		borderRadius: 12,
+		borderRadius: 10,
 		marginBottom: 10,
-		padding: '6px 7px 6px 11px',
+		padding: '3px 7px 3px 11px',
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-between',
 	},
 	progressButton: {
-		backgroundColor: theme.palette.grey[800],
+		backgroundColor: 'transparent',
+		// backgroundColor: theme.palette.grey[800],
 		height: 'fit-content',
-		borderRadius: 10,
+		borderRadius: 8,
 		'&:hover': {
-			borderRadius: 10,
+			borderRadius: 8,
 			backgroundColor: theme.palette.grey[900],
 		},
 	},

@@ -1,7 +1,7 @@
 import { muscleGroupEnum } from '.';
 import { Exercise } from '../types';
 
-export const exerciseDatabase: Exercise[] = [
+const exercises: Exercise[] = [
 	{
 		name: 'Incline Dumbbell Press',
 		targetMuscles: [muscleGroupEnum.CHEST, muscleGroupEnum.UPPER_CHEST],
@@ -57,3 +57,11 @@ export const exerciseDatabase: Exercise[] = [
 		progress: [],
 	},
 ];
+
+export const exerciseDatabase = exercises.sort((a, b) => {
+	const nameA = a.name.toLowerCase(),
+		nameB = b.name.toLowerCase();
+	if (nameA < nameB) return -1;
+	if (nameA > nameB) return 1;
+	return 0;
+});

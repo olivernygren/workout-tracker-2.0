@@ -5,6 +5,13 @@ export const workoutNameToPathConverter = (name: string) => {
 	return path;
 };
 
+export const exerciseNameToPathConverter = (name: string) => {
+	const lowerCaseName = name.toLowerCase();
+	const dashed = lowerCaseName.replaceAll(' ', '-');
+	const path = `${dashed}`;
+	return path;
+};
+
 export const pathToWorkoutNameConverter = (path: string) => {
 	const removedSlashes = path.replaceAll('/', '');
 	const spaced = removedSlashes.replaceAll('-', ' ');
