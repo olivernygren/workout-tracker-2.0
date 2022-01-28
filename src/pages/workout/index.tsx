@@ -41,8 +41,6 @@ export const WorkoutPage = () => {
 			workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
 	);
 
-	console.log(workoutObject);
-
 	return (
 		<Page title={workoutNameFromPath}>
 			<Grid item container direction="column">

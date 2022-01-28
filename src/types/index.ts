@@ -1,5 +1,5 @@
 export type ProgressSegment = {
-	microcycle?: number | string;
+	date?: number | string;
 	setIndex: number;
 	reps: number;
 	weight: number;

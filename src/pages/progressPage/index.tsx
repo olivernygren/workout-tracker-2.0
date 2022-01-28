@@ -71,7 +71,7 @@ export const ProgressPage = () => {
 					Sökresultat:
 				</Typography>
 				{searchResults.map((exercise) => (
-					<ExerciseProgressCard exercise={exercise.name} />
+					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
 			</Grid>
 		);
@@ -92,7 +92,7 @@ export const ProgressPage = () => {
 					Inga sökresultat
 				</Typography>
 				{searchResults.map((exercise) => (
-					<ExerciseProgressCard exercise={exercise.name} />
+					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
 			</Grid>
 		);
@@ -113,7 +113,7 @@ export const ProgressPage = () => {
 					Alla:
 				</Typography>
 				{exerciseDatabase.map((exercise) => (
-					<ExerciseProgressCard exercise={exercise.name} />
+					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
 			</Grid>
 		);

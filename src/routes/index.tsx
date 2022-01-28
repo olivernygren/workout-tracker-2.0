@@ -4,6 +4,7 @@ import {
 	ProgressPage,
 	WorkoutPage,
 	HomePage,
+	ExerciseProgressPage,
 } from '../pages';
 
 export const routes = [
@@ -29,6 +30,6 @@ export const routes = [
 	},
 	{
 		path: '/progress/:name',
-		element: <ProgressPage />,
+		element: <ExerciseProgressPage />,
 	},
 ];

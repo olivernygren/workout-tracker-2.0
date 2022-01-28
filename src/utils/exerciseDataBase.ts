@@ -49,11 +49,16 @@ const exercises: Exercise[] = [
 			muscleGroupEnum.QUADS,
 			muscleGroupEnum.GLUTES,
 		],
-		progress: [],
+		progress: [
+			{ setIndex: 1, weight: 200, reps: 10 },
+			{ setIndex: 2, weight: 210, reps: 10 },
+			{ setIndex: 3, weight: 220, reps: 9 },
+			{ setIndex: 4, weight: 230, reps: 8 },
+		],
 	},
 	{
 		name: 'Hip Adductor',
-		targetMuscles: [muscleGroupEnum.ADDUCTORS],
+		targetMuscles: [muscleGroupEnum.LEGS, muscleGroupEnum.ADDUCTORS],
 		progress: [],
 	},
 ];
