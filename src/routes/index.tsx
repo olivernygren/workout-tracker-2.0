@@ -1,5 +1,10 @@
-import { AllWorkoutsPage, CreateWorkoutPage, WorkoutPage } from '../pages';
-import HomePage from '../pages/home';
+import {
+	AllWorkoutsPage,
+	CreateWorkoutPage,
+	ProgressPage,
+	WorkoutPage,
+	HomePage,
+} from '../pages';
 
 export const routes = [
 	{
@@ -17,5 +22,13 @@ export const routes = [
 	{
 		path: '/create-workout',
 		element: <CreateWorkoutPage />,
+	},
+	{
+		path: '/progress',
+		element: <ProgressPage />,
+	},
+	{
+		path: '/progress/:name',
+		element: <ProgressPage />,
 	},
 ];

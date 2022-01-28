@@ -38,12 +38,12 @@ export const CreateWorkoutPage = () => {
 		RIR: undefined,
 	};
 
-	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
 	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
 		[]
 	);
 	const [workoutName, setWorkoutName] = useState('');
 	const [exercisesList] = useState<ExerciseInstance[]>([]);
+	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
 	const [searchValue, setSearchValue] = useState('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalErrorMessage, setModalErrorMessage] = useState('');
@@ -203,7 +203,9 @@ export const CreateWorkoutPage = () => {
 							className={classes.select}
 							placeholder="Välj"
 							onChange={handleSelectMuscleGroup}
-							IconComponent={() => <ExpandMoreRounded />}
+							// IconComponent={() => (
+							// 	<ExpandMoreRounded className={classes.selectIcon} />
+							// )}
 							MenuProps={{
 								classes: { paper: classes.selectMenu },
 							}}

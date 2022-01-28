@@ -43,6 +43,7 @@ export default makeStyles((theme) => ({
 		},
 		'& > svg': {
 			color: theme.palette.common.white,
+			marginRight: 5,
 		},
 	},
 	selectMenu: {
@@ -52,6 +53,9 @@ export default makeStyles((theme) => ({
 		maxHeight: 200,
 		width: '100%',
 		marginTop: 60,
+	},
+	selectIcon: {
+		color: theme.palette.common.white,
 	},
 	menuItem: {
 		color: theme.palette.common.white,
@@ -147,8 +151,6 @@ export default makeStyles((theme) => ({
 		position: 'fixed',
 		bottom: 20,
 		width: 'calc(100% - 32px)',
-		// marginTop: 20,
-		// alignSelf: 'end',
 		paddingTop: 8,
 		paddingBottom: 8,
 		'&.MuiButton-contained.Mui-disabled': {
