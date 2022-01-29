@@ -50,10 +50,24 @@ const exercises: Exercise[] = [
 			muscleGroupEnum.GLUTES,
 		],
 		progress: [
-			{ setIndex: 1, weight: 200, reps: 10 },
-			{ setIndex: 2, weight: 210, reps: 10 },
-			{ setIndex: 3, weight: 220, reps: 9 },
-			{ setIndex: 4, weight: 230, reps: 8 },
+			{
+				date: '220129',
+				progressInstances: [
+					{ setIndex: 1, weight: 200, reps: 10 },
+					{ setIndex: 2, weight: 210, reps: 10 },
+					{ setIndex: 3, weight: 220, reps: 9 },
+					{ setIndex: 4, weight: 230, reps: 8 },
+				],
+			},
+			{
+				date: '220130',
+				progressInstances: [
+					{ setIndex: 1, weight: 210, reps: 12 },
+					{ setIndex: 2, weight: 220, reps: 10 },
+					{ setIndex: 3, weight: 230, reps: 9 },
+					{ setIndex: 4, weight: 240, reps: 8 },
+				],
+			},
 		],
 	},
 	{

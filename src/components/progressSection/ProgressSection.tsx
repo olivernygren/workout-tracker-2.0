@@ -1,11 +1,36 @@
-import { Box } from '@material-ui/core';
-import React from 'react';
+import { Box, Grid, Typography } from '@material-ui/core';
+import { ProgressInstance } from '../../types';
+import { formatDate } from '../../utils';
 
 import useStyles from './styles';
 
-export const ProgressSection = () => {
+interface IProgressSection {
+	progressInstances: ProgressInstance[];
+	date: string;
+}
+
+export const ProgressSection = ({
+	progressInstances,
+	date,
+}: IProgressSection) => {
 	const classes = useStyles();
-	return <Box></Box>;
+	const dateString = formatDate(date);
+	return (
+		<Box className={classes.container}>
+			<Typography variant="h6" className={classes.date}>
+				{dateString}
+			</Typography>
+			<Grid item container direction="column">
+				{progressInstances.map((instance) => (
+					<Grid item container className={classes.set}>
+						<Typography variant="body1">Set {instance.setIndex}</Typography>
+						<Typography variant="body1">{instance.weight} kg</Typography>
+						<Typography variant="body1">{instance.reps} reps</Typography>
+					</Grid>
+				))}
+			</Grid>
+		</Box>
+	);
 };
 
 export default ProgressSection;

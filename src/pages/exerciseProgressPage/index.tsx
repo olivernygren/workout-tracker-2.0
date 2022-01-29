@@ -8,10 +8,10 @@ import {
 import { AddRounded } from '@material-ui/icons';
 
 import useStyles from './styles';
-import { Page, TitleHeader } from '../../components';
+import { Page, ProgressSection, TitleHeader } from '../../components';
 import { useParams } from 'react-router-dom';
 import { exerciseDatabase, pathToExerciseNameConverter } from '../../utils';
-import { Exercise } from '../../types';
+import { Exercise, ProgressInstance } from '../../types';
 import { useState } from 'react';
 
 export const ExerciseProgressPage = () => {
@@ -25,6 +25,8 @@ export const ExerciseProgressPage = () => {
 		progress: [],
 	};
 	const [exercise, setExercise] = useState(defaultExercise);
+	let progressInstances: ProgressInstance[] = [];
+	let progressDate: string = '';
 	// const isExerciseLoaded: boolean = exercise !== defaultExercise;
 
 	const matchedExercise = exerciseDatabase.find(
@@ -40,6 +42,20 @@ export const ExerciseProgressPage = () => {
 			<AddRounded />
 		</IconButton>
 	);
+
+	if (matchedExercise) {
+		matchedExercise!.progress!.forEach((segment) => {
+			console.log(segment.progressInstances);
+			progressInstances = segment.progressInstances;
+			return progressInstances;
+		});
+	}
+
+	if (matchedExercise) {
+		matchedExercise!.progress!.forEach((segment) => {
+			progressDate = segment.date!;
+		});
+	}
 
 	// const Exercises = () => {
 	// 	const exerciseProgressList = exercise.progress!.map((p) => (
@@ -70,23 +86,19 @@ export const ExerciseProgressPage = () => {
 					navigateTo="back"
 					button={<HeaderButton />}
 				/>
-				{/* {isExerciseLoaded ? (
-					<Typography>Progress finns</Typography>
-				) : (
-					<CircularProgress />
-				)} */}
-				{matchedExercise && matchedExercise.progress!.length > 0 ? (
-					matchedExercise!.progress!.map((p) => (
-						<Grid item>
-							<Typography>{p.date}</Typography>
-							<Typography>{p.setIndex}</Typography>
-							<Typography>{p.weight}</Typography>
-							<Typography>{p.reps}</Typography>
-						</Grid>
-					))
-				) : (
-					<Typography>Finns inget</Typography>
-				)}
+				<Grid item container direction="column" className={classes.container}>
+					{matchedExercise && matchedExercise.progress!.length > 0 ? (
+						matchedExercise?.progress?.map((p) => (
+							<ProgressSection
+								progressInstances={progressInstances}
+								date={p.date!}
+								key={p.date!}
+							/>
+						))
+					) : (
+						<Typography>Ingen progress finns</Typography>
+					)}
+				</Grid>
 			</Grid>
 		</Page>
 	);

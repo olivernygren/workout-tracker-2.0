@@ -8,3 +8,4 @@ export * from './workoutCard';
 export * from './exerciseCard';
 export * from './exerciseProgressCard';
 export * from './muiTextField';
+export * from './progressSection';
