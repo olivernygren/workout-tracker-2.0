@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import useStyles from './styles';
 import {
 	Page,
+	ProgressList,
 	ProgressSection,
 	StyledTextField,
 	TitleHeader,
@@ -28,16 +29,29 @@ export const ExerciseProgressPage = () => {
 	const classes = useStyles();
 	const { name } = useParams();
 	// const defaultNumberOfSets: number[] = [1, 2, 3];
-	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modalErrorMessage, setModalErrorMessage] = useState('');
-	// const [numberOfSets, setNumberOfSets] = useState(defaultNumberOfSets);
-	const [newProgressInstance, setNewProgressInstance] =
-		useState<ProgressInstance>({ setIndex: 0, weight: 0, reps: 0 });
-	const [newProgressSegment, setNewProgressSegment] = useState<ProgressSegment>(
-		{ date: undefined, progressInstances: [], notes: '' }
-	);
 	const exerciseNameFromPath = pathToExerciseNameConverter(name!);
 	let progressInstances: ProgressInstance[] = [];
+	const matchedExercise = exerciseDatabase.find(
+		(e) => e.name === exerciseNameFromPath
+	);
+	if (matchedExercise) {
+		matchedExercise!.progress!.forEach((segment) => {
+			progressInstances = segment.progressInstances;
+			return progressInstances;
+		});
+	}
+
+	const newSetIndex = progressInstances.length + 1;
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [modalErrorMessage, setModalErrorMessage] = useState('');
+	// const [newProgressInstance, setNewProgressInstance] =
+	// 	useState<ProgressInstance>({ setIndex: newSetIndex, weight: 0, reps: 0 });
+	// const [newProgressSegment, setNewProgressSegment] = useState<ProgressSegment>(
+	// 	{ date: undefined, progressInstances: [], notes: '' }
+	// );
+	const [weight, setWeight] = useState(0);
+	const [reps, setReps] = useState(0);
+	const [readyToAdd, setReadyToAdd] = useState(false);
 	const tabTitle = `Progress | ${exerciseNameFromPath}`;
 
 	const today = new Date();
@@ -47,11 +61,7 @@ export const ExerciseProgressPage = () => {
 		.substring(2, 4)}${addZero(today.getMonth() + 1)}${addZero(
 		today.getDate()
 	)}`;
-	const [date, setDate] = useState(todaysDate);
-
-	const matchedExercise = exerciseDatabase.find(
-		(e) => e.name === exerciseNameFromPath
-	);
+	const [date, setDate] = useState<string>(todaysDate);
 
 	const HeaderButton = () => (
 		<IconButton
@@ -63,14 +73,9 @@ export const ExerciseProgressPage = () => {
 		</IconButton>
 	);
 
-	if (matchedExercise) {
-		matchedExercise!.progress!.forEach((segment) => {
-			progressInstances = segment.progressInstances;
-			return progressInstances;
-		});
-	}
-
 	const handleSetModal = () => {
+		setDate(todaysDate);
+		console.log(date);
 		setIsModalOpen(!isModalOpen);
 	};
 
@@ -84,10 +89,11 @@ export const ExerciseProgressPage = () => {
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
 		// console.log('weight', event.target.value);
-		setNewProgressInstance((oldstate) => ({
-			...oldstate,
-			weight: parseInt(event.target.value),
-		}));
+		// setNewProgressInstance((oldstate) => ({
+		// 	...oldstate,
+		// 	weight: parseInt(event.target.value),
+		// }));
+		setWeight(parseInt(event.target.value));
 	};
 
 	// console.log(defaultProgressInstances);
@@ -95,73 +101,100 @@ export const ExerciseProgressPage = () => {
 	const handleUpdateRepsValue = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		setNewProgressInstance((oldstate) => ({
-			...oldstate,
-			reps: parseInt(event.target.value),
-		}));
+		// console.log('reps', event.target.value);
+		// setNewProgressInstance((oldstate) => ({
+		// 	...oldstate,
+		// 	reps: parseInt(event.target.value),
+		// }));
+		setReps(parseInt(event.target.value));
 	};
 
 	const handleAddProgress = () => {
-		// console.log(date);
+		setReadyToAdd(true);
+
 		const dateExists = matchedExercise!.progress!.find(
 			(obj) => obj.date === date
 		);
-		// console.log(dateExists);
 		if (dateExists) {
 			console.log(dateExists.date + ' finns redan, lägger till ny instance');
-			// let items = ['JS', 'PHP', 'RUBY'];
-
-			// let replacedItem = items.splice(items.indexOf('RUBY'), 1, 'PYTHON')
-
-			// console.log(replacedItem) //['RUBY']
-			// console.log(items) //['JS', 'PHP', 'PYTHON']
 			const updatedInstance = {
 				...dateExists!,
 				progressInstances: [
 					...dateExists.progressInstances,
-					newProgressInstance,
+					{
+						setIndex: newSetIndex,
+						reps: reps,
+						weight: weight,
+					},
 				],
 			};
-			console.log(updatedInstance);
+			// console.log(updatedInstance);
 			matchedExercise!.progress!.splice(
 				matchedExercise!.progress!.indexOf(dateExists),
 				1,
 				updatedInstance
 			);
-			console.log(matchedExercise?.progress);
+			setReadyToAdd(false);
+			// console.log(matchedExercise?.progress);
 		} else {
 			console.log('finns ej, lägger till nytt segment');
-			setNewProgressSegment({
-				date: date,
-				progressInstances: [
-					...progressInstances,
-					{
-						setIndex: progressInstances.length + 1,
-						reps: newProgressInstance.reps,
-						weight: newProgressInstance.weight,
-					},
-				],
-				notes: '',
-			});
+			// setNewProgressSegment({
+			// 	date: date,
+			// 	progressInstances: [
+			// 		// ...progressInstances,
+			// 		{
+			// 			setIndex: newSetIndex,
+			// 			reps: reps,
+			// 			weight: weight,
+			// 		},
+			// 	],
+			// 	notes: '',
+			// });
 		}
 
 		setIsModalOpen(false);
 	};
 
-	if (newProgressSegment.date) {
-		// prevent duplicate
-		// kolla om date redan finns, i så fall pusha endast newInstance till progressInstances[]
+	if (readyToAdd) {
+		console.log('triggar if sats');
 		// sätt rätt set index
-		matchedExercise!.progress!.push(newProgressSegment);
-		setNewProgressSegment({
-			date: undefined,
-			progressInstances: [],
-			notes: '',
-		});
+		// validation på modal textfields
+		// styla modal
+		// sortera array
+		const dateExists = matchedExercise!.progress!.find(
+			(obj) => obj.date === date
+		);
+		if (!dateExists) {
+			matchedExercise!.progress!.unshift({
+				date: date,
+				progressInstances: [
+					// ...progressInstances,
+					{
+						setIndex: newSetIndex,
+						reps: reps,
+						weight: weight,
+					},
+				],
+				notes: '',
+			});
+			// setNewProgressInstance({ setIndex: newSetIndex, weight: 0, reps: 0 });
+			setDate(todaysDate);
+			setReadyToAdd(false);
+		}
+		setReadyToAdd(false);
+		// setNewProgressSegment({
+		// 	date: undefined,
+		// 	progressInstances: [],
+		// 	notes: '',
+		// });
 	}
 
-	// console.log(newProgressSegment);
-	// console.log(matchedExercise!.progress!);
+	console.log(weight);
+	console.log(reps);
+
+	const sortedArray = matchedExercise!.progress!.sort((a, b) => {
+		return parseInt(b.date!) - parseInt(a.date!);
+	});
 
 	return (
 		<Page title={tabTitle}>
@@ -173,20 +206,7 @@ export const ExerciseProgressPage = () => {
 					navigateTo="back"
 					button={<HeaderButton />}
 				/>
-				<Grid item container direction="column" className={classes.container}>
-					{matchedExercise && matchedExercise.progress!.length > 0 ? (
-						matchedExercise?.progress?.map((p) => (
-							<ProgressSection
-								progressInstances={progressInstances}
-								date={p.date!}
-								notes={p.notes! || ''}
-								key={p.date!}
-							/>
-						))
-					) : (
-						<Typography>Ingen progress finns</Typography>
-					)}
-				</Grid>
+				<ProgressList progressArray={sortedArray} />
 			</Grid>
 			{isModalOpen && (
 				<Modal
@@ -207,7 +227,6 @@ export const ExerciseProgressPage = () => {
 								small
 								defaultValue={todaysDate}
 								onChange={(event) => handleUpdateDateValue(event)}
-								// onChange={(event) => handleUpdateWeightValue(event)}
 							/>
 							<Grid item container className={classes.modalTextFieldContainer}>
 								<StyledTextField

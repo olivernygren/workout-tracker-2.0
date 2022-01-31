@@ -34,9 +34,9 @@ export const ProgressSection = ({
 				</Typography>
 			)}
 			<Grid item container direction="column">
-				{progressInstances.map((instance) => (
+				{progressInstances.map((instance, index) => (
 					<Grid item container className={classes.set}>
-						<Typography variant="body1">Set {instance.setIndex}</Typography>
+						<Typography variant="body1">Set {index + 1}</Typography>
 						<Grid item container className={classes.weightXreps}>
 							<Typography variant="body1">{instance.weight} kg</Typography>
 							<Typography variant="body1" className={classes.xSign}>
