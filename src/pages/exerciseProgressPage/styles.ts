@@ -34,6 +34,14 @@ export default makeStyles((theme) => ({
 		justifyContent: 'space-between',
 		marginBottom: 20,
 	},
+	modalHeaderDateContainer: {
+		width: 'fit-content',
+		flexWrap: 'nowrap',
+		alignItems: 'center',
+		'& > p': {
+			marginRight: 8,
+		},
+	},
 	modalCloseIcon: {
 		color: theme.palette.common.white,
 		// backgroundColor: theme.palette.secondary.main,
@@ -59,7 +67,7 @@ export default makeStyles((theme) => ({
 	},
 	addProgressButton: {
 		borderRadius: 20,
-		marginTop: 20,
+		marginTop: 14,
 		paddingTop: 8,
 		paddingBottom: 8,
 		'&.MuiButton-contained.Mui-disabled': {

@@ -1,4 +1,5 @@
-import { Box, Checkbox, Grid, Typography } from '@material-ui/core';
+import { Box, Button, Checkbox, Grid, Typography } from '@material-ui/core';
+import { AddRounded } from '@material-ui/icons';
 import { ProgressInstance } from '../../../types';
 import { formatDate } from '../../../utils';
 
@@ -47,6 +48,15 @@ export const ProgressSection = ({
 					</Grid>
 				))}
 			</Grid>
+			<Button
+				endIcon={<AddRounded fontSize="small" />}
+				className={classes.notesButton}
+				disableElevation
+				variant="contained"
+				// onClick={handleNavigate}
+			>
+				Anteckningar
+			</Button>
 		</Box>
 	);
 };

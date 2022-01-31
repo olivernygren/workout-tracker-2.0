@@ -39,4 +39,15 @@ export default makeStyles((theme) => ({
 	xSign: {
 		margin: '0 10px',
 	},
+	notesButton: {
+		// paddingTop: 5,
+		// paddingBottom: 5,
+		padding: '3px 12px',
+		borderRadius: 30,
+		fontSize: 13,
+		alignSelf: 'center',
+		// backgroundColor: theme.palette.secondary.main,
+		backgroundColor: '#303030',
+		// alignSelf: 'end'
+	},
 }));

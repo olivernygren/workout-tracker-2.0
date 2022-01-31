@@ -6,7 +6,7 @@ import {
 	Modal,
 	Typography,
 } from '@material-ui/core';
-import { AddRounded } from '@material-ui/icons';
+import { AddRounded, CloseRounded } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -157,10 +157,10 @@ export const ExerciseProgressPage = () => {
 
 	if (readyToAdd) {
 		console.log('triggar if sats');
-		// sätt rätt set index
 		// validation på modal textfields
-		// styla modal
-		// sortera array
+		// spara progress värdet, kopplat till datum
+		// "lägg till notes"-knapp (skicka ett setNotes state till ProgressList -> ProgressSection)
+		// "lägg till notes"-modal med defaultValue av redan existerande notes
 		const dateExists = matchedExercise!.progress!.find(
 			(obj) => obj.date === date
 		);
@@ -188,9 +188,6 @@ export const ExerciseProgressPage = () => {
 		// 	notes: '',
 		// });
 	}
-
-	console.log(weight);
-	console.log(reps);
 
 	const sortedArray = matchedExercise!.progress!.sort((a, b) => {
 		return parseInt(b.date!) - parseInt(a.date!);
@@ -221,13 +218,28 @@ export const ExerciseProgressPage = () => {
 							direction="column"
 							className={classes.modalContentContainer}
 						>
-							<Typography variant="h6">Lägg till set</Typography>
-							<StyledTextField
-								placeholder="Datum"
-								small
-								defaultValue={todaysDate}
-								onChange={(event) => handleUpdateDateValue(event)}
-							/>
+							<Grid item container className={classes.modalHeader}>
+								<Typography variant="h6">Lägg till set</Typography>
+								<Grid
+									item
+									container
+									className={classes.modalHeaderDateContainer}
+								>
+									<Typography variant="body2">Datum: </Typography>
+									<StyledTextField
+										placeholder="Datum"
+										small
+										defaultValue={todaysDate}
+										onChange={(event) => handleUpdateDateValue(event)}
+									/>
+									{/* <IconButton
+										onClick={() => setIsModalOpen(false)}
+										className={classes.modalCloseIcon}
+									>
+										<CloseRounded />
+									</IconButton> */}
+								</Grid>
+							</Grid>
 							<Grid item container className={classes.modalTextFieldContainer}>
 								<StyledTextField
 									placeholder="kg"

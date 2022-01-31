@@ -25,8 +25,8 @@ export default makeStyles((theme) => ({
 			},
 	},
 	smallInput: {
-		height: 30,
-		width: 70,
+		height: 26,
+		width: 60,
 		backgroundImage: theme.palette.gradient.gradient,
 		padding: '2px 4px',
 		borderRadius: 5,
