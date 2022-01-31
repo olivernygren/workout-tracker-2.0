@@ -1,5 +1,5 @@
 export type ProgressInstance = {
-	setIndex: number;
+	setIndex?: number;
 	reps: number;
 	weight: number;
 };
@@ -7,6 +7,7 @@ export type ProgressInstance = {
 export type ProgressSegment = {
 	date?: string;
 	progressInstances: ProgressInstance[];
+	notes?: string;
 };
 
 export type Exercise = {

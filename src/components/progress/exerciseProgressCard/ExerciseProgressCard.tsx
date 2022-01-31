@@ -1,7 +1,7 @@
 import { Box, IconButton, Typography } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 
-import { exerciseNameToPathConverter, ProgressIcon } from '../../utils';
+import { exerciseNameToPathConverter, ProgressIcon } from '../../../utils';
 import useStyles from './styles';
 
 interface IExerciseProgressCard {

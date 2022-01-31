@@ -13,11 +13,6 @@ export const WorkoutPage = () => {
 	const navigateTo = useNavigate();
 	const { name } = useParams();
 	const workoutNameFromPath = pathToWorkoutNameConverter(name!);
-	// const [workout, setWorkout] = useState<Workout>({
-	// 	name: '',
-	// 	targetMuscles: [],
-	// 	exercises: [],
-	// });
 
 	const HeaderButton = () => (
 		<Button

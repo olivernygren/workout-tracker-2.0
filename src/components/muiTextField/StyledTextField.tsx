@@ -19,6 +19,7 @@ interface IStyledTextField {
 	className?: string;
 	small?: boolean;
 	tiny?: boolean;
+	label?: string;
 }
 
 export const StyledTextField = ({
@@ -29,9 +30,11 @@ export const StyledTextField = ({
 	// onFocus,
 	fullWidth,
 	value,
+	defaultValue,
 	className,
 	small,
 	tiny,
+	label,
 }: IStyledTextField) => {
 	const classes = useStyles();
 	const iconPaddingAdjust =
@@ -56,6 +59,8 @@ export const StyledTextField = ({
 			onChange={onChange}
 			onBlur={onBlur}
 			value={value}
+			defaultValue={defaultValue}
+			label={label}
 			className={className}
 			inputProps={{ className: inputClass }}
 			InputProps={{

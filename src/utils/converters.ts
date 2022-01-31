@@ -44,6 +44,14 @@ export const removeZero = (dateSection: string) => {
 	}
 };
 
+export const addZero = (dateSection: number) => {
+	if (dateSection < 10) {
+		return `0${dateSection}`;
+	} else {
+		return dateSection;
+	}
+};
+
 export const formatDate = (date: string) => {
 	const year = `20${date.substring(0, 2)}`;
 	const month = date.substring(2, 4);

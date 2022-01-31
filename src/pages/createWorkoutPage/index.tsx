@@ -227,16 +227,6 @@ export const CreateWorkoutPage = () => {
 					<Typography variant="h5" className={classes.label}>
 						Övningar
 					</Typography>
-					{/* <Button
-						endIcon={<AddRounded />}
-						className={classes.headerButton}
-						disableElevation
-						color="primary"
-						variant="contained"
-						onClick={handleSetModal}
-					>
-						Lägg till
-					</Button> */}
 				</Grid>
 				<Grid
 					container

@@ -58,6 +58,7 @@ const exercises: Exercise[] = [
 					{ setIndex: 3, weight: 220, reps: 9 },
 					{ setIndex: 4, weight: 230, reps: 8 },
 				],
+				notes: 'Tvingades köra 4 set Leg Press innan',
 			},
 			{
 				date: '220130',
