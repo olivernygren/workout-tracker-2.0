@@ -46,8 +46,8 @@ export default makeStyles((theme) => ({
 		borderRadius: 30,
 		fontSize: 13,
 		alignSelf: 'center',
-		// backgroundColor: theme.palette.secondary.main,
-		backgroundColor: '#303030',
+		backgroundColor: theme.palette.secondary.main,
+		// backgroundColor: '#303030',
 		// alignSelf: 'end'
 	},
 }));

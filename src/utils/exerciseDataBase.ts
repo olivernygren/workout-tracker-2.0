@@ -53,20 +53,20 @@ const exercises: Exercise[] = [
 			{
 				date: '220129',
 				progressInstances: [
-					{ setIndex: 1, weight: 200, reps: 10 },
-					{ setIndex: 2, weight: 210, reps: 10 },
-					{ setIndex: 3, weight: 220, reps: 9 },
-					{ setIndex: 4, weight: 230, reps: 8 },
+					{ weight: 200, reps: 10 },
+					{ weight: 210, reps: 10 },
+					{ weight: 220, reps: 9 },
+					{ weight: 230, reps: 8 },
 				],
 				notes: 'Tvingades köra 4 set Leg Press innan',
 			},
 			{
 				date: '220130',
 				progressInstances: [
-					{ setIndex: 1, weight: 210, reps: 12 },
-					{ setIndex: 2, weight: 220, reps: 10 },
-					{ setIndex: 3, weight: 230, reps: 9 },
-					{ setIndex: 4, weight: 240, reps: 8 },
+					{ weight: 210, reps: 12 },
+					{ weight: 220, reps: 10 },
+					{ weight: 230, reps: 9 },
+					{ weight: 240, reps: 8 },
 				],
 			},
 		],

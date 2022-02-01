@@ -1,5 +1,4 @@
 export type ProgressInstance = {
-	setIndex?: number;
 	reps: number;
 	weight: number;
 };

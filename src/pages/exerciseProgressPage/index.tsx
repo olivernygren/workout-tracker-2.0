@@ -170,7 +170,6 @@ export const ExerciseProgressPage = () => {
 				progressInstances: [
 					// ...progressInstances,
 					{
-						setIndex: newSetIndex,
 						reps: reps,
 						weight: weight,
 					},
