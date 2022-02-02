@@ -6,15 +6,14 @@ import {
 	Modal,
 	Typography,
 } from '@material-ui/core';
-import { AddRounded, CloseRounded } from '@material-ui/icons';
+import { AddRounded } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import useStyles from './styles';
 import {
 	Page,
 	ProgressList,
-	ProgressSection,
 	StyledTextField,
 	TitleHeader,
 } from '../../components';
@@ -28,9 +27,10 @@ import { ProgressInstance, ProgressSegment } from '../../types';
 export const ExerciseProgressPage = () => {
 	const classes = useStyles();
 	const { name } = useParams();
-	// const defaultNumberOfSets: number[] = [1, 2, 3];
 	const exerciseNameFromPath = pathToExerciseNameConverter(name!);
+
 	let progressInstances: ProgressInstance[] = [];
+	let sortedArray: ProgressSegment[] = [];
 	const matchedExercise = exerciseDatabase.find(
 		(e) => e.name === exerciseNameFromPath
 	);
@@ -40,10 +40,14 @@ export const ExerciseProgressPage = () => {
 			return progressInstances;
 		});
 	}
+	if (matchedExercise) {
+		sortedArray = matchedExercise!.progress!.sort((a, b) => {
+			return parseInt(b.date!) - parseInt(a.date!);
+		});
+	}
 
-	const newSetIndex = progressInstances.length + 1;
 	const [isModalOpen, setIsModalOpen] = useState(false);
-	const [modalErrorMessage, setModalErrorMessage] = useState('');
+	const [modalErrorMessage] = useState('');
 	// const [newProgressInstance, setNewProgressInstance] =
 	// 	useState<ProgressInstance>({ setIndex: newSetIndex, weight: 0, reps: 0 });
 	// const [newProgressSegment, setNewProgressSegment] = useState<ProgressSegment>(
@@ -88,24 +92,12 @@ export const ExerciseProgressPage = () => {
 	const handleUpdateWeightValue = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		// console.log('weight', event.target.value);
-		// setNewProgressInstance((oldstate) => ({
-		// 	...oldstate,
-		// 	weight: parseInt(event.target.value),
-		// }));
 		setWeight(parseInt(event.target.value));
 	};
-
-	// console.log(defaultProgressInstances);
 
 	const handleUpdateRepsValue = (
 		event: React.ChangeEvent<HTMLInputElement>
 	) => {
-		// console.log('reps', event.target.value);
-		// setNewProgressInstance((oldstate) => ({
-		// 	...oldstate,
-		// 	reps: parseInt(event.target.value),
-		// }));
 		setReps(parseInt(event.target.value));
 	};
 
@@ -115,6 +107,7 @@ export const ExerciseProgressPage = () => {
 		const dateExists = matchedExercise!.progress!.find(
 			(obj) => obj.date === date
 		);
+
 		if (dateExists) {
 			console.log(dateExists.date + ' finns redan, lägger till ny instance');
 			const updatedInstance = {
@@ -122,34 +115,21 @@ export const ExerciseProgressPage = () => {
 				progressInstances: [
 					...dateExists.progressInstances,
 					{
-						setIndex: newSetIndex,
 						reps: reps,
 						weight: weight,
 					},
 				],
 			};
-			// console.log(updatedInstance);
+			//updateDoc()
 			matchedExercise!.progress!.splice(
 				matchedExercise!.progress!.indexOf(dateExists),
 				1,
 				updatedInstance
 			);
 			setReadyToAdd(false);
-			// console.log(matchedExercise?.progress);
 		} else {
+			// addDoc()
 			console.log('finns ej, lägger till nytt segment');
-			// setNewProgressSegment({
-			// 	date: date,
-			// 	progressInstances: [
-			// 		// ...progressInstances,
-			// 		{
-			// 			setIndex: newSetIndex,
-			// 			reps: reps,
-			// 			weight: weight,
-			// 		},
-			// 	],
-			// 	notes: '',
-			// });
 		}
 
 		setIsModalOpen(false);
@@ -188,10 +168,6 @@ export const ExerciseProgressPage = () => {
 		// });
 	}
 
-	const sortedArray = matchedExercise!.progress!.sort((a, b) => {
-		return parseInt(b.date!) - parseInt(a.date!);
-	});
-
 	return (
 		<Page title={tabTitle}>
 			<Grid item container direction="column">
@@ -202,7 +178,13 @@ export const ExerciseProgressPage = () => {
 					navigateTo="back"
 					button={<HeaderButton />}
 				/>
-				<ProgressList progressArray={sortedArray} />
+				{matchedExercise ? (
+					<ProgressList progressArray={sortedArray} />
+				) : (
+					<Grid style={{ marginTop: 24 }}>
+						<Typography>Ingen progress finns</Typography>
+					</Grid>
+				)}
 			</Grid>
 			{isModalOpen && (
 				<Modal

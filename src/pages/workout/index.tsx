@@ -1,18 +1,49 @@
+import { useEffect, useState } from 'react';
 import { Grid, Button } from '@material-ui/core';
 import { EditRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
+import { collection, DocumentData, getDocs } from '@firebase/firestore';
 
 import useStyles from './styles';
-import { ExerciseCard, Page, TitleHeader } from '../../components';
-import { pathToWorkoutNameConverter, workouts } from '../../utils';
+import { ExerciseCard, Page, Spinner, TitleHeader } from '../../components';
+import { pathToWorkoutNameConverter } from '../../utils';
 import { ExerciseInstance } from '../../types';
-// import { useState } from 'react';
+import { db } from '../../firebase-config';
 
 export const WorkoutPage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
 	const { name } = useParams();
 	const workoutNameFromPath = pathToWorkoutNameConverter(name!);
+
+	const workoutsCollectionRef = collection(db, 'workouts');
+	const [workout, setWorkout] = useState<DocumentData>({
+		name: '',
+		exercises: [],
+		targetMuscles: [],
+		path: '',
+		createdAt: '',
+	});
+	const [isLoading, setIsLoading] = useState(true);
+
+	useEffect(() => {
+		// setIsLoading(true);
+		const getWorkouts = async () => {
+			const data = await getDocs(workoutsCollectionRef);
+			const workouts = data.docs.map((doc) => doc.data());
+			// const sortedWorkouts = workouts.sort((a, b) => {
+			// 	return a.createdAt - b.createdAt;
+			// });
+			const matchingWorkout = workouts.find(
+				(workout) =>
+					workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
+			);
+			setWorkout(matchingWorkout!);
+		};
+		getWorkouts();
+		setIsLoading(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const HeaderButton = () => (
 		<Button
@@ -31,10 +62,20 @@ export const WorkoutPage = () => {
 		navigateTo('/link');
 	};
 
-	const workoutObject = workouts.find(
-		(workout) =>
-			workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
-	);
+	// const workoutObject = sortedWorkouts.find(
+	// 	(workout) =>
+	// 		workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
+	// );
+	const ExerciseList = () => {
+		return workout!.exercises.map((exercise: ExerciseInstance) => (
+			<ExerciseCard
+				exercise={exercise.exercise.name}
+				sets={exercise.sets}
+				repRange={exercise.repRange}
+				key={exercise.exercise.name}
+			/>
+		));
+	};
 
 	return (
 		<Page title={workoutNameFromPath}>
@@ -48,14 +89,7 @@ export const WorkoutPage = () => {
 				/>
 			</Grid>
 			<Grid item container direction="column" className={classes.cardContainer}>
-				{workoutObject!.exercises.map((exercise: ExerciseInstance) => (
-					<ExerciseCard
-						exercise={exercise.exercise.name}
-						sets={exercise.sets}
-						repRange={exercise.repRange}
-						key={exercise.exercise.name}
-					/>
-				))}
+				{isLoading ? <Spinner /> : <ExerciseList />}
 			</Grid>
 		</Page>
 	);

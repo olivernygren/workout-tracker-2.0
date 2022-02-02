@@ -5,6 +5,7 @@ import {
 	WorkoutPage,
 	HomePage,
 	ExerciseProgressPage,
+	CreateExercisePage,
 } from '../pages';
 
 export const routes = [
@@ -31,5 +32,9 @@ export const routes = [
 	{
 		path: '/progress/:name',
 		element: <ExerciseProgressPage />,
+	},
+	{
+		path: '/db',
+		element: <CreateExercisePage />,
 	},
 ];

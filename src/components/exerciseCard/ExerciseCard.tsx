@@ -1,7 +1,8 @@
 import { Box, Grid, IconButton, Typography } from '@material-ui/core';
 import { ReplayRounded } from '@material-ui/icons';
 import React from 'react';
-import { ProgressIcon } from '../../utils';
+import { useNavigate } from 'react-router-dom';
+import { exerciseNameToPathConverter, ProgressIcon } from '../../utils';
 
 import useStyles from './styles';
 
@@ -13,7 +14,12 @@ interface IExerciseCard {
 
 export const ExerciseCard = ({ exercise, sets, repRange }: IExerciseCard) => {
 	const classes = useStyles();
+	const navigateTo = useNavigate();
 	const setsAndRepsString = `${sets} × ${repRange}`;
+
+	const handleNavigate = () => {
+		navigateTo(`/progress/${exerciseNameToPathConverter(exercise)}`);
+	};
 
 	return (
 		<Box className={classes.container}>
@@ -26,7 +32,7 @@ export const ExerciseCard = ({ exercise, sets, repRange }: IExerciseCard) => {
 					</Typography>
 				</Grid>
 			</Grid>
-			<IconButton className={classes.progressButton}>
+			<IconButton className={classes.progressButton} onClick={handleNavigate}>
 				<ProgressIcon />
 			</IconButton>
 		</Box>

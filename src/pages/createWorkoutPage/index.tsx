@@ -147,13 +147,6 @@ export const CreateWorkoutPage = () => {
 			setCreateErrorMessage('Fyll i namn och muskelgrupper');
 			return;
 		}
-		console.log({
-			name: workoutName,
-			exercises: exercisesList,
-			targetMuscles: selectedMuscleGroups,
-			path: workoutNameToPathConverter(workoutName),
-			createdAt: getCurrentTime(),
-		});
 		await addDoc(workoutsCollectionRef, {
 			name: workoutName,
 			exercises: exercisesList,

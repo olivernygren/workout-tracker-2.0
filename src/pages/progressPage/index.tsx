@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import { Grid, Typography } from '@material-ui/core';
 import { SearchRounded } from '@material-ui/icons';
+import { collection, DocumentData, getDocs } from '@firebase/firestore';
 
 import useStyles from './styles';
 import {
@@ -8,15 +10,39 @@ import {
 	StyledTextField,
 	TitleHeader,
 } from '../../components';
-import { exerciseDatabase } from '../../utils';
 import { Exercise } from '../../types';
-import { useState } from 'react';
+import { db } from '../../firebase-config';
 
 export const ProgressPage = () => {
 	const classes = useStyles();
 
-	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+	const [searchResults, setSearchResults] = useState<
+		Exercise[] | DocumentData[]
+	>([]);
 	const [searchValue, setSearchValue] = useState('');
+	const [exercises, setExercises] = useState<DocumentData[]>([]);
+	const exercisesCollectionRef = collection(db, 'exercises');
+
+	useEffect(() => {
+		// setIsLoading(true);
+		const getExercises = async () => {
+			const data = await getDocs(exercisesCollectionRef);
+			const exercisesFromDB = data.docs.map((doc) => doc.data());
+			if (exercisesFromDB.length > 1) {
+				const sortedExercises = exercisesFromDB.sort((a, b) => {
+					const nameA = a.name.toLowerCase(),
+						nameB = b.name.toLowerCase();
+					if (nameA < nameB) return -1;
+					if (nameA > nameB) return 1;
+					return 0;
+				});
+				setExercises(sortedExercises);
+			}
+			// setExercises(exercisesFromDB);
+		};
+		getExercises();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// const HeaderButton = () => (
 	// 	<Button
@@ -32,7 +58,7 @@ export const ProgressPage = () => {
 	// );
 
 	const searchFunction = (text: string) => {
-		const searchArr = exerciseDatabase.filter((exercise: Exercise) => {
+		const searchArr = exercises.filter((exercise) => {
 			if (text !== '') {
 				return (
 					exercise.name.toLowerCase().match(text.toLowerCase()) ||
@@ -112,7 +138,7 @@ export const ProgressPage = () => {
 				>
 					Alla:
 				</Typography>
-				{exerciseDatabase.map((exercise) => (
+				{exercises.map((exercise) => (
 					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
 			</Grid>

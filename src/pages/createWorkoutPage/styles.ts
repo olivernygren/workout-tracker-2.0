@@ -54,9 +54,6 @@ export default makeStyles((theme) => ({
 		width: '100%',
 		marginTop: 60,
 	},
-	selectIcon: {
-		color: theme.palette.common.white,
-	},
 	menuItem: {
 		color: theme.palette.common.white,
 		paddingTop: 0,
@@ -70,6 +67,9 @@ export default makeStyles((theme) => ({
 			paddingTop: 4,
 			paddingBottom: 8,
 		},
+	},
+	selectIcon: {
+		color: theme.palette.common.white,
 	},
 	chipContainer: {
 		margin: '8px 0 0 0',

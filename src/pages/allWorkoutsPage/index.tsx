@@ -1,17 +1,13 @@
 import { useEffect, useState } from 'react';
-import { Grid, Button, CircularProgress } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 import { AddRounded } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
 
 import { db } from '../../firebase-config';
 import useStyles from './styles';
-import { Page, TitleHeader, WorkoutCard } from '../../components';
-import {
-	getCurrentTime,
-	workoutNameToPathConverter,
-	// workouts,
-} from '../../utils';
+import { Page, Spinner, TitleHeader, WorkoutCard } from '../../components';
+import { workoutNameToPathConverter } from '../../utils';
 import { getNumberOfSets } from '../../utils/getNumberOfSets';
 import { Workout } from '../../types';
 
@@ -23,10 +19,7 @@ export const AllWorkoutsPage = () => {
 	const [workoutsFromDB, setWorkoutsFromDB] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
-	console.log(getCurrentTime());
-
 	useEffect(() => {
-		// setIsLoading(true);
 		const getWorkouts = async () => {
 			const data = await getDocs(workoutsCollectionRef);
 			const unsortedWorkouts = data.docs.map((doc) => doc.data());
@@ -60,13 +53,7 @@ export const AllWorkoutsPage = () => {
 	return (
 		<Page title="Alla Pass">
 			{isLoading ? (
-				<Grid
-					item
-					container
-					style={{ alignItems: 'center', justifyContent: 'center' }}
-				>
-					<CircularProgress />
-				</Grid>
+				<Spinner />
 			) : (
 				<>
 					<Grid
@@ -88,14 +75,6 @@ export const AllWorkoutsPage = () => {
 						direction="column"
 						className={classes.cardContainer}
 					>
-						{/* {workouts.map((workout) => (
-					<WorkoutCard
-						name={workout.name}
-						sets={getNumberOfSets(workout)}
-						path={workoutNameToPathConverter(workout.name)}
-						key={workout.name}
-					/>
-				))} */}
 						{workoutsFromDB.map((workout: Workout) => {
 							return (
 								<WorkoutCard

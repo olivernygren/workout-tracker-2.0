@@ -101,8 +101,8 @@ export const getCurrentTime = () => {
 	const minutes = today.getMinutes();
 	const seconds = today.getSeconds();
 	// console.log(year, month, date, hours, minutes, seconds);
-	const fullString = `${year}${addZero(month + 1)}${addZero(
-		date
-	)}${hours}${minutes}${seconds}`;
+	const fullString = `${year}${addZero(month + 1)}${addZero(date)}${addZero(
+		hours
+	)}${addZero(minutes)}${addZero(seconds)}`;
 	return fullString;
 };
