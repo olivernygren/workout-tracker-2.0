@@ -90,3 +90,19 @@ export const getMonthName = (month: string) => {
 			return '-';
 	}
 };
+
+export const getCurrentTime = () => {
+	const today = new Date();
+	// console.log(today);
+	const year = today.getFullYear();
+	const month = today.getMonth();
+	const date = today.getDate();
+	const hours = today.getHours();
+	const minutes = today.getMinutes();
+	const seconds = today.getSeconds();
+	// console.log(year, month, date, hours, minutes, seconds);
+	const fullString = `${year}${addZero(month + 1)}${addZero(
+		date
+	)}${hours}${minutes}${seconds}`;
+	return fullString;
+};

@@ -19,7 +19,7 @@ export type ExerciseInstance = {
 	exercise: Exercise;
 	sets: number;
 	repRange: string;
-	RIR?: number;
+	RIR?: number | null;
 };
 
 export type Workout = {
@@ -27,6 +27,7 @@ export type Workout = {
 	exercises: ExerciseInstance[];
 	targetMuscles: string[];
 	path?: string;
+	createdAt?: string;
 };
 
 export type Program = {

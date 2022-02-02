@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react';
 import { Grid, Button, CircularProgress } from '@material-ui/core';
 import { AddRounded } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
-import { collection, getDocs, addDoc } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 import { db } from '../../firebase-config';
 import useStyles from './styles';
 import { Page, TitleHeader, WorkoutCard } from '../../components';
-import { workoutNameToPathConverter, workouts } from '../../utils';
+import {
+	getCurrentTime,
+	workoutNameToPathConverter,
+	// workouts,
+} from '../../utils';
 import { getNumberOfSets } from '../../utils/getNumberOfSets';
 import { Workout } from '../../types';
 
@@ -19,17 +23,21 @@ export const AllWorkoutsPage = () => {
 	const [workoutsFromDB, setWorkoutsFromDB] = useState<any[]>([]);
 	const [isLoading, setIsLoading] = useState(true);
 
+	console.log(getCurrentTime());
+
 	useEffect(() => {
 		// setIsLoading(true);
 		const getWorkouts = async () => {
 			const data = await getDocs(workoutsCollectionRef);
-			setWorkoutsFromDB(
-				data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-				// data.docs.map((doc) => ({ ...doc.data(), id: doc.id }))
-			);
+			const unsortedWorkouts = data.docs.map((doc) => doc.data());
+			const sortedWorkouts = unsortedWorkouts.sort((a, b) => {
+				return a.createdAt - b.createdAt;
+			});
+			setWorkoutsFromDB(sortedWorkouts);
 		};
 		getWorkouts();
 		setIsLoading(false);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const HeaderButton = () => (
@@ -88,13 +96,13 @@ export const AllWorkoutsPage = () => {
 						key={workout.name}
 					/>
 				))} */}
-						{workoutsFromDB.map((workout) => {
+						{workoutsFromDB.map((workout: Workout) => {
 							return (
 								<WorkoutCard
 									name={workout.name}
 									sets={getNumberOfSets(workout)}
 									path={workoutNameToPathConverter(workout.name)}
-									key={workout.id}
+									key={workout.createdAt!}
 								/>
 							);
 						})}

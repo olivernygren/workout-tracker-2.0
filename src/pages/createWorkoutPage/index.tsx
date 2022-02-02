@@ -18,11 +18,14 @@ import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
 import {
 	exerciseDatabase,
+	getCurrentTime,
 	muscleGroups,
 	workoutNameToPathConverter,
 	workouts,
 } from '../../utils';
 import { Exercise, ExerciseInstance, Workout } from '../../types';
+import { addDoc, collection } from 'firebase/firestore';
+import { db } from '../../firebase-config';
 
 export const CreateWorkoutPage = () => {
 	const classes = useStyles();
@@ -31,9 +34,9 @@ export const CreateWorkoutPage = () => {
 		exercise: { name: '', targetMuscles: [] },
 		sets: 0,
 		repRange: '',
-		RIR: undefined,
+		RIR: null,
 	};
-
+	const workoutsCollectionRef = collection(db, 'workouts');
 	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
 		[]
 	);
@@ -52,6 +55,7 @@ export const CreateWorkoutPage = () => {
 		exercises: [],
 		targetMuscles: [],
 		path: '',
+		createdAt: '',
 	});
 
 	const searchFunction = (text: string) => {
@@ -138,16 +142,31 @@ export const CreateWorkoutPage = () => {
 		setExerciseToAdd(defualtExerciseInstance);
 	};
 
-	const handleCreateWorkout = () => {
+	const handleCreateWorkout = async () => {
 		if (workoutName === '' || selectedMuscleGroups.length === 0) {
 			setCreateErrorMessage('Fyll i namn och muskelgrupper');
 			return;
 		}
+		console.log({
+			name: workoutName,
+			exercises: exercisesList,
+			targetMuscles: selectedMuscleGroups,
+			path: workoutNameToPathConverter(workoutName),
+			createdAt: getCurrentTime(),
+		});
+		await addDoc(workoutsCollectionRef, {
+			name: workoutName,
+			exercises: exercisesList,
+			targetMuscles: selectedMuscleGroups,
+			path: workoutNameToPathConverter(workoutName),
+			createdAt: getCurrentTime(),
+		});
 		setWorkout({
 			name: workoutName,
 			exercises: exercisesList,
 			targetMuscles: selectedMuscleGroups,
 			path: workoutNameToPathConverter(workoutName),
+			createdAt: getCurrentTime(),
 		});
 	};
 
@@ -167,6 +186,7 @@ export const CreateWorkoutPage = () => {
 			exercises: [],
 			targetMuscles: [],
 			path: '',
+			createdAt: '',
 		});
 		navigateTo('/all-workouts');
 	}
