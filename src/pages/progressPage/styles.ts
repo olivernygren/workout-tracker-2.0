@@ -14,6 +14,13 @@ export default makeStyles((theme) => ({
 	exerciseListTextHeader: {
 		marginBottom: 10,
 	},
+	loadingContainer: {
+		alignItems: 'center',
+		width: 'fit-content',
+	},
+	loadingText: {
+		marginRight: 10,
+	},
 	searchResultsContainer: {
 		position: 'absolute',
 		left: 0,

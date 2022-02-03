@@ -1,9 +1,10 @@
-import { Workout } from '../types';
+import { DocumentData } from 'firebase/firestore';
+import { ExerciseInstance, Workout } from '../types';
 
-export const getNumberOfSets = (workout: Workout) => {
+export const getNumberOfSets = (workout: Workout | DocumentData) => {
 	const setsArray: number[] = [];
 	// workouts.forEach((workout) => {
-	workout.exercises.forEach((exercise) => {
+	workout.exercises.forEach((exercise: ExerciseInstance) => {
 		setsArray.push(exercise.sets);
 	});
 	// });

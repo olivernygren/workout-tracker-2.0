@@ -1,14 +1,32 @@
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Grid, Button } from '@material-ui/core';
 import { ChevronRightRounded } from '@material-ui/icons';
-import { useNavigate } from 'react-router-dom';
+import { getDocs, collection, DocumentData } from '@firebase/firestore';
 
 import useStyles from './styles';
 import { HomeCard, HomeWorkoutCard, Page, TitleHeader } from '../../components';
-import { getNumberOfSets, homePageCards, workouts } from '../../utils';
+import { getNumberOfSets, homePageCards } from '../../utils';
+import { db } from '../../firebase-config';
 
 export const HomePage = () => {
 	const classes = useStyles();
 	const navigateTo = useNavigate();
+	const workoutsCollectionRef = collection(db, 'workouts');
+	const [workoutsFromDB, setWorkoutsFromDB] = useState<DocumentData[]>([]);
+
+	useEffect(() => {
+		const getWorkouts = async () => {
+			const data = await getDocs(workoutsCollectionRef);
+			const unsortedWorkouts = data.docs.map((doc) => doc.data());
+			const sortedWorkouts = unsortedWorkouts.sort((a, b) => {
+				return a.createdAt - b.createdAt;
+			});
+			setWorkoutsFromDB(sortedWorkouts);
+		};
+		getWorkouts();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const HeaderButton = () => (
 		<Button
@@ -29,7 +47,7 @@ export const HomePage = () => {
 			<Grid item container direction="column">
 				<TitleHeader title="Dina pass" button={<HeaderButton />} />
 				<Grid item container className={classes.workoutCardContainer}>
-					{workouts.map((workout) => (
+					{workoutsFromDB.map((workout) => (
 						<HomeWorkoutCard
 							name={workout.name}
 							exercises={workout.exercises.length}
@@ -37,13 +55,6 @@ export const HomePage = () => {
 							key={workout.name}
 						/>
 					))}
-					{/* <HomeWorkoutCard name="Legs 1" exercises={5} sets={20} />
-					<HomeWorkoutCard
-						name="Shoulders &amp; Triceps 1"
-						exercises={5}
-						sets={20}
-					/>
-					<HomeWorkoutCard name="Back 1" exercises={5} sets={20} /> */}
 				</Grid>
 				<Grid item container className={classes.cardContainer}>
 					{homePageCards.map((card) => (

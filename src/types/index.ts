@@ -15,6 +15,11 @@ export type Exercise = {
 	progress?: ProgressSegment[];
 };
 
+export type Superset = {
+	firstExercise: Exercise;
+	secondExercise: Exercise;
+};
+
 export type ExerciseInstance = {
 	exercise: Exercise;
 	sets: number;

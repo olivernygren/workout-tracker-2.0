@@ -9,6 +9,7 @@ export default makeStyles((theme) => ({
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'space-between',
+		minHeight: 44,
 	},
 	progressButton: {
 		backgroundColor: 'transparent',

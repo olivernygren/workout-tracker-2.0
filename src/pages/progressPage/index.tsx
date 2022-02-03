@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Grid, Typography } from '@material-ui/core';
-import { SearchRounded } from '@material-ui/icons';
+import { Button, CircularProgress, Grid, Typography } from '@material-ui/core';
+import { AddRounded, SearchRounded } from '@material-ui/icons';
 import { collection, DocumentData, getDocs } from '@firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 
 import useStyles from './styles';
 import {
@@ -15,6 +16,7 @@ import { db } from '../../firebase-config';
 
 export const ProgressPage = () => {
 	const classes = useStyles();
+	const navigateTo = useNavigate();
 
 	const [searchResults, setSearchResults] = useState<
 		Exercise[] | DocumentData[]
@@ -24,7 +26,6 @@ export const ProgressPage = () => {
 	const exercisesCollectionRef = collection(db, 'exercises');
 
 	useEffect(() => {
-		// setIsLoading(true);
 		const getExercises = async () => {
 			const data = await getDocs(exercisesCollectionRef);
 			const exercisesFromDB = data.docs.map((doc) => doc.data());
@@ -38,24 +39,27 @@ export const ProgressPage = () => {
 				});
 				setExercises(sortedExercises);
 			}
-			// setExercises(exercisesFromDB);
 		};
 		getExercises();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	// const HeaderButton = () => (
-	// 	<Button
-	// 		endIcon={<AddRounded />}
-	// 		className={classes.headerButton}
-	// 		color="primary"
-	// 		disableElevation
-	// 		variant="contained"
-	// 		onClick={handleNavigate}
-	// 	>
-	// 		Knapp
-	// 	</Button>
-	// );
+	const handleNavigate = () => {
+		navigateTo('/db');
+	};
+
+	const HeaderButton = () => (
+		<Button
+			endIcon={<AddRounded />}
+			className={classes.headerButton}
+			color="secondary"
+			disableElevation
+			variant="contained"
+			onClick={handleNavigate}
+		>
+			Ny övning
+		</Button>
+	);
 
 	const searchFunction = (text: string) => {
 		const searchArr = exercises.filter((exercise) => {
@@ -90,12 +94,27 @@ export const ProgressPage = () => {
 				direction="column"
 				className={classes.exercisesContainer}
 			>
-				<Typography
+				{searchResults.length === 0 ? (
+					<Grid item container className={classes.loadingContainer}>
+						<Typography variant="subtitle1" className={classes.loadingText}>
+							Laddar
+						</Typography>
+						<CircularProgress size={18} />
+					</Grid>
+				) : (
+					<Typography
+						variant="subtitle1"
+						className={classes.exerciseListTextHeader}
+					>
+						Sökresultat:
+					</Typography>
+				)}
+				{/* <Typography
 					variant="subtitle1"
 					className={classes.exerciseListTextHeader}
 				>
-					Sökresultat:
-				</Typography>
+					{searchResults.length === 0 ? 'Laddar...' : 'Sökresultat:'}
+				</Typography> */}
 				{searchResults.map((exercise) => (
 					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
@@ -132,12 +151,27 @@ export const ProgressPage = () => {
 				direction="column"
 				className={classes.exercisesContainer}
 			>
-				<Typography
+				{exercises.length === 0 ? (
+					<Grid item container className={classes.loadingContainer}>
+						<Typography variant="subtitle1" className={classes.loadingText}>
+							Laddar
+						</Typography>
+						<CircularProgress size={18} />
+					</Grid>
+				) : (
+					<Typography
+						variant="subtitle1"
+						className={classes.exerciseListTextHeader}
+					>
+						Alla:
+					</Typography>
+				)}
+				{/* <Typography
 					variant="subtitle1"
 					className={classes.exerciseListTextHeader}
 				>
-					Alla:
-				</Typography>
+					{exercises.length === 0 ? 'Laddar...' : 'Alla:'}
+				</Typography> */}
 				{exercises.map((exercise) => (
 					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}
@@ -152,7 +186,7 @@ export const ProgressPage = () => {
 					title="Progress"
 					navigateBackButton
 					navigateTo="/"
-					// button={<HeaderButton />}
+					button={<HeaderButton />}
 				/>
 			</Grid>
 			<Grid

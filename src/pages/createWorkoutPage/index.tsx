@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import {
 	Grid,
 	Typography,
@@ -12,19 +13,17 @@ import {
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import { AddRounded, SearchRounded } from '@material-ui/icons';
-import { useState } from 'react';
+import { addDoc, collection, DocumentData, getDocs } from '@firebase/firestore';
 
 import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
 import {
-	exerciseDatabase,
 	getCurrentTime,
 	muscleGroups,
 	workoutNameToPathConverter,
 	workouts,
 } from '../../utils';
 import { Exercise, ExerciseInstance, Workout } from '../../types';
-import { addDoc, collection } from 'firebase/firestore';
 import { db } from '../../firebase-config';
 
 export const CreateWorkoutPage = () => {
@@ -42,7 +41,9 @@ export const CreateWorkoutPage = () => {
 	);
 	const [workoutName, setWorkoutName] = useState('');
 	const [exercisesList] = useState<ExerciseInstance[]>([]);
-	const [searchResults, setSearchResults] = useState<Exercise[]>([]);
+	const [searchResults, setSearchResults] = useState<
+		Exercise[] | DocumentData[]
+	>([]);
 	const [searchValue, setSearchValue] = useState('');
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalErrorMessage, setModalErrorMessage] = useState('');
@@ -57,9 +58,32 @@ export const CreateWorkoutPage = () => {
 		path: '',
 		createdAt: '',
 	});
+	const [exercises, setExercises] = useState<DocumentData[]>([]);
+	const exercisesCollectionRef = collection(db, 'exercises');
+
+	useEffect(() => {
+		// setIsLoading(true);
+		const getExercises = async () => {
+			const data = await getDocs(exercisesCollectionRef);
+			const exercisesFromDB = data.docs.map((doc) => doc.data());
+			if (exercisesFromDB.length > 1) {
+				const sortedExercises = exercisesFromDB.sort((a, b) => {
+					const nameA = a.name.toLowerCase(),
+						nameB = b.name.toLowerCase();
+					if (nameA < nameB) return -1;
+					if (nameA > nameB) return 1;
+					return 0;
+				});
+				setExercises(sortedExercises);
+			}
+			// setExercises(exercisesFromDB);
+		};
+		getExercises();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	const searchFunction = (text: string) => {
-		const searchArr = exerciseDatabase.filter((exercise: Exercise) => {
+		const searchArr = exercises.filter((exercise) => {
 			if (text !== '') {
 				return (
 					exercise.name.toLowerCase().match(text.toLowerCase()) ||
@@ -107,7 +131,7 @@ export const CreateWorkoutPage = () => {
 		setIsModalOpen(!isModalOpen);
 	};
 
-	const handleSetActiveExercise = (exercise: Exercise) => {
+	const handleSetActiveExercise = (exercise: Exercise | DocumentData) => {
 		setExerciseToAdd((oldstate) => ({
 			...oldstate,
 			exercise: { name: exercise.name, targetMuscles: exercise.targetMuscles },

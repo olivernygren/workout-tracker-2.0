@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
 	Grid,
 	Button,
@@ -7,12 +8,10 @@ import {
 	Typography,
 	Chip,
 } from '@material-ui/core';
-import { AddRounded } from '@material-ui/icons';
+import { addDoc, collection, getDocs } from '@firebase/firestore';
 
 import useStyles from './styles';
 import { Page, StyledTextField, TitleHeader } from '../../components';
-import React, { useEffect, useState } from 'react';
-import { addDoc, collection, getDocs } from '@firebase/firestore';
 import { db } from '../../firebase-config';
 import { muscleGroups } from '../../utils';
 
@@ -27,13 +26,9 @@ export const CreateExercisePage = () => {
 	const exercisesCollectionRef = collection(db, 'exercises');
 
 	useEffect(() => {
-		// setIsLoading(true);
 		const getExercises = async () => {
 			const data = await getDocs(exercisesCollectionRef);
 			const exercisesFromDB = data.docs.map((doc) => doc.data());
-			// const sortedWorkouts = workouts.sort((a, b) => {
-			// 	return a.createdAt - b.createdAt;
-			// });
 			exercisesFromDB.forEach((exercise) => {
 				setExercises((oldstate) => [...oldstate, exercise.name]);
 			});
@@ -41,18 +36,6 @@ export const CreateExercisePage = () => {
 		getExercises();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
-
-	const HeaderButton = () => (
-		<Button
-			endIcon={<AddRounded />}
-			className={classes.headerButton}
-			color="primary"
-			disableElevation
-			variant="contained"
-		>
-			Knapp
-		</Button>
-	);
 
 	const handleSetName = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const splitArray: string[] = event.target.value.toLowerCase().split(' ');
@@ -93,13 +76,12 @@ export const CreateExercisePage = () => {
 	};
 
 	return (
-		<Page title="Titel">
+		<Page title="Lägg till övning">
 			<Grid item container direction="column">
 				<TitleHeader
-					title="Titel"
+					title="Lägg till övning"
 					navigateBackButton
 					navigateTo="back"
-					button={<HeaderButton />}
 				/>
 			</Grid>
 			<Grid item container direction="column">
@@ -116,9 +98,6 @@ export const CreateExercisePage = () => {
 						className={classes.select}
 						placeholder="Välj"
 						onChange={handleSelectMuscleGroup}
-						// IconComponent={() => (
-						// 	<ExpandMoreRounded className={classes.selectIcon} />
-						// )}
 						MenuProps={{
 							classes: { paper: classes.selectMenu },
 						}}
