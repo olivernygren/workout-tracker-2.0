@@ -20,6 +20,8 @@ interface IStyledTextField {
 	small?: boolean;
 	tiny?: boolean;
 	label?: string;
+	multiline?: boolean;
+	rows?: number;
 }
 
 export const StyledTextField = ({
@@ -35,6 +37,8 @@ export const StyledTextField = ({
 	small,
 	tiny,
 	label,
+	multiline,
+	rows,
 }: IStyledTextField) => {
 	const classes = useStyles();
 	const iconPaddingAdjust =
@@ -62,6 +66,8 @@ export const StyledTextField = ({
 			defaultValue={defaultValue}
 			label={label}
 			className={className}
+			multiline={multiline}
+			rows={rows}
 			inputProps={{ className: inputClass }}
 			InputProps={{
 				className: parentDivClass,

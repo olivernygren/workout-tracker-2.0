@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from 'react';
 import {
 	Box,
 	Button,
@@ -8,7 +9,15 @@ import {
 } from '@material-ui/core';
 import { AddRounded } from '@material-ui/icons';
 import { useParams } from 'react-router-dom';
-import { useState } from 'react';
+import {
+	collection,
+	DocumentData,
+	doc,
+	updateDoc,
+	onSnapshot,
+	where,
+	query,
+} from '@firebase/firestore';
 
 import useStyles from './styles';
 import {
@@ -17,45 +26,56 @@ import {
 	StyledTextField,
 	TitleHeader,
 } from '../../components';
-import {
-	addZero,
-	exerciseDatabase,
-	pathToExerciseNameConverter,
-} from '../../utils';
-import { ProgressInstance, ProgressSegment } from '../../types';
+import { addZero, pathToExerciseNameConverter } from '../../utils';
+import { ProgressSegment, Exercise } from '../../types';
+import { db } from '../../firebase-config';
 
 export const ExerciseProgressPage = () => {
 	const classes = useStyles();
 	const { name } = useParams();
 	const exerciseNameFromPath = pathToExerciseNameConverter(name!);
+	const [id, setId] = useState<string>('');
+	const [matchingExercise, setMatchingExercise] = useState<
+		DocumentData | Exercise | undefined
+	>({ name: '', progress: [], targetMuscles: [] });
 
-	let progressInstances: ProgressInstance[] = [];
+	const exercisesCollectionRef = collection(db, 'exercises');
+
+	useEffect(() => {
+		const getMatchingExercise = async () => {
+			const q = query(
+				exercisesCollectionRef,
+				where('name', '==', exerciseNameFromPath)
+			);
+			onSnapshot(q, (snapshot) => {
+				snapshot.docs.forEach((d) => {
+					setMatchingExercise(d.data());
+					setId(d.id);
+				});
+			});
+		};
+		getMatchingExercise();
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
 	let sortedArray: ProgressSegment[] = [];
-	const matchedExercise = exerciseDatabase.find(
-		(e) => e.name === exerciseNameFromPath
-	);
-	if (matchedExercise) {
-		matchedExercise!.progress!.forEach((segment) => {
-			progressInstances = segment.progressInstances;
-			return progressInstances;
-		});
-	}
-	if (matchedExercise) {
-		sortedArray = matchedExercise!.progress!.sort((a, b) => {
-			return parseInt(b.date!) - parseInt(a.date!);
-		});
+
+	// sort progress segments by date
+	if (matchingExercise) {
+		sortedArray = matchingExercise!.progress!.sort(
+			(
+				a: DocumentData | ProgressSegment,
+				b: DocumentData | ProgressSegment
+			) => {
+				return parseInt(b.date!) - parseInt(a.date!);
+			}
+		);
 	}
 
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [modalErrorMessage] = useState('');
-	// const [newProgressInstance, setNewProgressInstance] =
-	// 	useState<ProgressInstance>({ setIndex: newSetIndex, weight: 0, reps: 0 });
-	// const [newProgressSegment, setNewProgressSegment] = useState<ProgressSegment>(
-	// 	{ date: undefined, progressInstances: [], notes: '' }
-	// );
 	const [weight, setWeight] = useState(0);
 	const [reps, setReps] = useState(0);
-	const [readyToAdd, setReadyToAdd] = useState(false);
 	const tabTitle = `Progress | ${exerciseNameFromPath}`;
 
 	const today = new Date();
@@ -79,7 +99,6 @@ export const ExerciseProgressPage = () => {
 
 	const handleSetModal = () => {
 		setDate(todaysDate);
-		console.log(date);
 		setIsModalOpen(!isModalOpen);
 	};
 
@@ -101,15 +120,14 @@ export const ExerciseProgressPage = () => {
 		setReps(parseInt(event.target.value));
 	};
 
-	const handleAddProgress = () => {
-		setReadyToAdd(true);
-
-		const dateExists = matchedExercise!.progress!.find(
-			(obj) => obj.date === date
+	const handleAddProgress = async () => {
+		const dateExists: ProgressSegment = matchingExercise!.progress!.find(
+			(obj: ProgressSegment) => obj.date === date
 		);
 
 		if (dateExists) {
-			console.log(dateExists.date + ' finns redan, lägger till ny instance');
+			// console.log(dateExists.date + ' finns redan, lägger till ny instance');
+			const docRef = doc(db, 'exercises', id);
 			const updatedInstance = {
 				...dateExists!,
 				progressInstances: [
@@ -120,53 +138,32 @@ export const ExerciseProgressPage = () => {
 					},
 				],
 			};
-			//updateDoc()
-			matchedExercise!.progress!.splice(
-				matchedExercise!.progress!.indexOf(dateExists),
+			matchingExercise!.progress!.splice(
+				matchingExercise!.progress!.indexOf(dateExists),
 				1,
 				updatedInstance
 			);
-			setReadyToAdd(false);
+			await updateDoc(docRef, {
+				progress: [...matchingExercise!.progress!],
+			});
+			setIsModalOpen(false);
 		} else {
-			// addDoc()
-			console.log('finns ej, lägger till nytt segment');
-		}
-
-		setIsModalOpen(false);
-	};
-
-	if (readyToAdd) {
-		console.log('triggar if sats');
-		// validation på modal textfields
-		// spara progress värdet, kopplat till datum
-		// "lägg till notes"-knapp (skicka ett setNotes state till ProgressList -> ProgressSection)
-		// "lägg till notes"-modal med defaultValue av redan existerande notes
-		const dateExists = matchedExercise!.progress!.find(
-			(obj) => obj.date === date
-		);
-		if (!dateExists) {
-			matchedExercise!.progress!.unshift({
-				date: date,
-				progressInstances: [
-					// ...progressInstances,
+			// console.log('finns ej, lägger till nytt segment');
+			const docRef = doc(db, 'exercises', id);
+			await updateDoc(docRef, {
+				progress: [
+					...matchingExercise!.progress!,
 					{
-						reps: reps,
-						weight: weight,
+						date: date,
+						notes: '',
+						progressInstances: [{ reps: reps, weight: weight }],
 					},
 				],
-				notes: '',
 			});
-			// setNewProgressInstance({ setIndex: newSetIndex, weight: 0, reps: 0 });
+			setIsModalOpen(false);
 			setDate(todaysDate);
-			setReadyToAdd(false);
 		}
-		setReadyToAdd(false);
-		// setNewProgressSegment({
-		// 	date: undefined,
-		// 	progressInstances: [],
-		// 	notes: '',
-		// });
-	}
+	};
 
 	return (
 		<Page title={tabTitle}>
@@ -178,8 +175,11 @@ export const ExerciseProgressPage = () => {
 					navigateTo="back"
 					button={<HeaderButton />}
 				/>
-				{matchedExercise ? (
-					<ProgressList progressArray={sortedArray} />
+				{matchingExercise ? (
+					<ProgressList
+						progressArray={sortedArray}
+						// setShowNotesModal={handleSetNotesModal}
+					/>
 				) : (
 					<Grid style={{ marginTop: 24 }}>
 						<Typography>Ingen progress finns</Typography>

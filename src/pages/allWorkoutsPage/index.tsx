@@ -6,7 +6,7 @@ import { collection, getDocs } from 'firebase/firestore';
 
 import { db } from '../../firebase-config';
 import useStyles from './styles';
-import { Page, Spinner, TitleHeader, WorkoutCard } from '../../components';
+import { Page, TitleHeader, WorkoutCard } from '../../components';
 import { workoutNameToPathConverter } from '../../utils';
 import { getNumberOfSets } from '../../utils/getNumberOfSets';
 import { Workout } from '../../types';
@@ -17,7 +17,7 @@ export const AllWorkoutsPage = () => {
 
 	const workoutsCollectionRef = collection(db, 'workouts');
 	const [workoutsFromDB, setWorkoutsFromDB] = useState<any[]>([]);
-	const [isLoading, setIsLoading] = useState(true);
+	// const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
 		const getWorkouts = async () => {
@@ -29,7 +29,7 @@ export const AllWorkoutsPage = () => {
 			setWorkoutsFromDB(sortedWorkouts);
 		};
 		getWorkouts();
-		setIsLoading(false);
+		// setIsLoading(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -52,42 +52,31 @@ export const AllWorkoutsPage = () => {
 
 	return (
 		<Page title="Alla Pass">
-			{isLoading ? (
-				<Spinner />
-			) : (
-				<>
-					<Grid
-						item
-						container
-						direction="column"
-						className={classes.titleHeaderContainer}
-					>
-						<TitleHeader
-							title="Alla pass"
-							navigateBackButton
-							navigateTo="/"
-							button={<HeaderButton />}
+			<Grid
+				item
+				container
+				direction="column"
+				className={classes.titleHeaderContainer}
+			>
+				<TitleHeader
+					title="Alla pass"
+					navigateBackButton
+					navigateTo="/"
+					button={<HeaderButton />}
+				/>
+			</Grid>
+			<Grid item container direction="column" className={classes.cardContainer}>
+				{workoutsFromDB.map((workout: Workout) => {
+					return (
+						<WorkoutCard
+							name={workout.name}
+							sets={getNumberOfSets(workout)}
+							path={workoutNameToPathConverter(workout.name)}
+							key={workout.createdAt!}
 						/>
-					</Grid>
-					<Grid
-						item
-						container
-						direction="column"
-						className={classes.cardContainer}
-					>
-						{workoutsFromDB.map((workout: Workout) => {
-							return (
-								<WorkoutCard
-									name={workout.name}
-									sets={getNumberOfSets(workout)}
-									path={workoutNameToPathConverter(workout.name)}
-									key={workout.createdAt!}
-								/>
-							);
-						})}
-					</Grid>
-				</>
-			)}
+					);
+				})}
+			</Grid>
 		</Page>
 	);
 };

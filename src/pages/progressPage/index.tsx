@@ -109,12 +109,6 @@ export const ProgressPage = () => {
 						Sökresultat:
 					</Typography>
 				)}
-				{/* <Typography
-					variant="subtitle1"
-					className={classes.exerciseListTextHeader}
-				>
-					{searchResults.length === 0 ? 'Laddar...' : 'Sökresultat:'}
-				</Typography> */}
 				{searchResults.map((exercise) => (
 					<ExerciseProgressCard exercise={exercise.name} key={exercise.name} />
 				))}

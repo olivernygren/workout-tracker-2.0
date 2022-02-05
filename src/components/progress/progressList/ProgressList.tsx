@@ -7,9 +7,13 @@ import useStyles from './styles';
 
 interface IProgressList {
 	progressArray: ProgressSegment[];
+	// setShowNotesModal: () => void;
 }
 
-export const ProgressList = ({ progressArray }: IProgressList) => {
+export const ProgressList = ({
+	progressArray,
+}: // setShowNotesModal,
+IProgressList) => {
 	// console.log(progressArray);
 	const classes = useStyles();
 	return progressArray.length > 0 ? (
@@ -19,6 +23,7 @@ export const ProgressList = ({ progressArray }: IProgressList) => {
 					date={segment.date!}
 					progressInstances={segment.progressInstances}
 					notes={segment.notes || ''}
+					// setShowNotesModal={setShowNotesModal}
 					key={Math.random() * 10000}
 				/>
 			))}

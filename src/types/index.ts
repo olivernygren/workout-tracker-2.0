@@ -6,6 +6,7 @@ export type ProgressInstance = {
 export type ProgressSegment = {
 	date?: string;
 	progressInstances: ProgressInstance[];
+	progressMade?: boolean;
 	notes?: string;
 };
 
@@ -38,5 +39,27 @@ export type Workout = {
 export type Program = {
 	name: string;
 	workouts: Workout[];
-	durationInWeeks: number;
+	durationInWeeks?: number;
+};
+
+export type SleepRecord = {
+	date: string;
+	time: string;
+};
+
+export type ChecklistItem = {
+	label: string;
+	category: string;
+	checked: boolean;
+};
+
+export type EvaluationRecord = {
+	date: string;
+	food: number;
+	sleep: number;
+	cardio: number;
+	training: number;
+	productivity: number;
+	wellBeing: number;
+	dailySatisfaction: string;
 };
