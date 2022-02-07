@@ -4,6 +4,7 @@ import progress from '../icons/progress.svg';
 import cardio from '../icons/cardio.svg';
 import checklist from '../icons/checklist.svg';
 import evaluation from '../icons/evaluation.svg';
+import scale from '../icons/scale.svg';
 
 interface IIcon {
 	className?: string;
@@ -26,4 +27,7 @@ export const CardioIcon = ({ className }: IIcon) => {
 };
 export const EvaluationIcon = ({ className }: IIcon) => {
 	return <img className={className} src={evaluation} alt="Utvärdering"></img>;
+};
+export const ScaleIcon = ({ className }: IIcon) => {
+	return <img className={className} src={scale} alt="Utvärdering"></img>;
 };

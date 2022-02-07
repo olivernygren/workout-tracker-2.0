@@ -106,3 +106,15 @@ export const getCurrentTime = () => {
 	)}${addZero(minutes)}${addZero(seconds)}`;
 	return fullString;
 };
+
+export const dotToCommaConverter = (number: number) => {
+	const numberAsString = number.toString();
+	const numberToReturn = numberAsString.replaceAll('.', ',');
+	return numberToReturn;
+};
+
+export const commaToDotConverter = (number: string) => {
+	const withDot = number.replaceAll(',', '.');
+	const numberFormat = parseInt(withDot);
+	return numberFormat;
+};

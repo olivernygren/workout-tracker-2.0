@@ -1,4 +1,10 @@
-import { MoonIcon, ProgressIcon, EvaluationIcon, CheckListIcon } from './icons';
+import {
+	MoonIcon,
+	ProgressIcon,
+	EvaluationIcon,
+	CheckListIcon,
+	ScaleIcon,
+} from './icons';
 
 export const homePageCards = [
 	{
@@ -10,6 +16,11 @@ export const homePageCards = [
 		label: 'Checklista',
 		icon: <CheckListIcon />,
 		path: '/checklist',
+	},
+	{
+		label: 'Kroppsvikt',
+		icon: <ScaleIcon />,
+		path: '/weight',
 	},
 	{
 		label: 'Daglig utvärdering',

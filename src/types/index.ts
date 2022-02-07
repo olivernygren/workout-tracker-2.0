@@ -48,6 +48,11 @@ export type SleepRecord = {
 	time: string;
 };
 
+export type WeightRecord = {
+	date: string;
+	weight: number;
+};
+
 export type ChecklistItem = {
 	label: string;
 	category: string;

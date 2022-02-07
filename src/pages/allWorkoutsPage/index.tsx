@@ -46,6 +46,8 @@ export const AllWorkoutsPage = () => {
 		</Button>
 	);
 
+	console.log(workoutsFromDB);
+
 	const handleNavigate = () => {
 		navigateTo('/create-workout');
 	};
