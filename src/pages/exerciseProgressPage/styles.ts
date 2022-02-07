@@ -44,7 +44,6 @@ export default makeStyles((theme) => ({
 	},
 	modalCloseIcon: {
 		color: theme.palette.common.white,
-		// backgroundColor: theme.palette.secondary.main,
 		padding: 6,
 		'&:hover': {
 			backgroundColor: theme.palette.secondary.main,
