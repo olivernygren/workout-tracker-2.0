@@ -17,13 +17,14 @@ export type Exercise = {
 };
 
 export type Superset = {
-	firstExercise: Exercise;
-	secondExercise: Exercise;
+	firstExercise: ExerciseInstance;
+	secondExercise: ExerciseInstance;
+	sets: number;
 };
 
 export type ExerciseInstance = {
 	exercise: Exercise;
-	sets: number;
+	sets?: number;
 	repRange: string;
 	RIR?: number | null;
 };

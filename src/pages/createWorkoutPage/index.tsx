@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
 	Grid,
 	Typography,
@@ -23,7 +23,7 @@ import {
 	workoutNameToPathConverter,
 	workouts,
 } from '../../utils';
-import { Exercise, ExerciseInstance, Workout } from '../../types';
+import { Exercise, ExerciseInstance, Superset, Workout } from '../../types';
 import { db } from '../../firebase-config';
 
 export const CreateWorkoutPage = () => {
@@ -35,21 +35,33 @@ export const CreateWorkoutPage = () => {
 		repRange: '',
 		RIR: null,
 	};
+	const defualtSupersetInstance: Superset = {
+		sets: 0,
+		firstExercise: { exercise: { name: '', targetMuscles: [] }, repRange: '' },
+		secondExercise: { exercise: { name: '', targetMuscles: [] }, repRange: '' },
+	};
 	const workoutsCollectionRef = collection(db, 'workouts');
 	const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
 		[]
 	);
 	const [workoutName, setWorkoutName] = useState('');
-	const [exercisesList] = useState<ExerciseInstance[]>([]);
+	const [exercisesList] = useState<any[]>([]);
 	const [searchResults, setSearchResults] = useState<
 		Exercise[] | DocumentData[]
 	>([]);
+	const [supersetSearchResults, setSupersetSearchResults] = useState<
+		Exercise[] | DocumentData[] | any[]
+	>([]);
 	const [searchValue, setSearchValue] = useState('');
-	const [isModalOpen, setIsModalOpen] = useState(false);
+	const [isExerciseModalOpen, setIsModalOpen] = useState(false);
+	const [isSupersetModalOpen, setIsSupersetModalOpen] = useState(false);
 	const [modalErrorMessage, setModalErrorMessage] = useState('');
 	const [createErrorMessage, setCreateErrorMessage] = useState('');
 	const [exerciseToAdd, setExerciseToAdd] = useState<ExerciseInstance>(
 		defualtExerciseInstance
+	);
+	const [supersetToAdd, setSupersetToAdd] = useState<Superset>(
+		defualtSupersetInstance
 	);
 	const [workout, setWorkout] = useState<Workout>({
 		name: '',
@@ -62,7 +74,6 @@ export const CreateWorkoutPage = () => {
 	const exercisesCollectionRef = collection(db, 'exercises');
 
 	useEffect(() => {
-		// setIsLoading(true);
 		const getExercises = async () => {
 			const data = await getDocs(exercisesCollectionRef);
 			const exercisesFromDB = data.docs.map((doc) => doc.data());
@@ -76,13 +87,12 @@ export const CreateWorkoutPage = () => {
 				});
 				setExercises(sortedExercises);
 			}
-			// setExercises(exercisesFromDB);
 		};
 		getExercises();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-	const searchFunction = (text: string) => {
+	const searchFunction = (text: string, type: 'superset' | 'default') => {
 		const searchArr = exercises.filter((exercise) => {
 			if (text !== '') {
 				return (
@@ -93,12 +103,18 @@ export const CreateWorkoutPage = () => {
 				return '';
 			}
 		});
-		setSearchResults(searchArr);
+		if (type === 'default') setSearchResults(searchArr);
+		if (type === 'superset') setSupersetSearchResults(searchArr);
 	};
 
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		setSearchValue(event.target.value);
-		searchFunction(event.target.value);
+		searchFunction(event.target.value, 'default');
+	};
+
+	const handleSupersetChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchValue(event.target.value);
+		searchFunction(event.target.value, 'superset');
 	};
 
 	const handleSetName = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -112,6 +128,7 @@ export const CreateWorkoutPage = () => {
 	const handleBlur = () => {
 		setTimeout(() => {
 			setSearchResults([]);
+			setSupersetSearchResults([]);
 		}, 50);
 	};
 
@@ -127,8 +144,13 @@ export const CreateWorkoutPage = () => {
 		setSelectedMuscleGroups(filteredArray);
 	};
 
-	const handleSetModal = () => {
-		setIsModalOpen(!isModalOpen);
+	const handleSetExerciseModal = () => {
+		setIsModalOpen(!isExerciseModalOpen);
+	};
+
+	const handleSetSupersetModal = () => {
+		setIsSupersetModalOpen(!isSupersetModalOpen);
+		setSupersetToAdd(defualtSupersetInstance);
 	};
 
 	const handleSetActiveExercise = (exercise: Exercise | DocumentData) => {
@@ -137,7 +159,7 @@ export const CreateWorkoutPage = () => {
 			exercise: { name: exercise.name, targetMuscles: exercise.targetMuscles },
 		}));
 		setSearchValue('');
-		handleSetModal();
+		handleSetExerciseModal();
 	};
 
 	const handleUpdateSets = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -154,6 +176,79 @@ export const CreateWorkoutPage = () => {
 		}));
 	};
 
+	const handleUpdateSuperset = (
+		field: string,
+		event?: React.ChangeEvent<HTMLInputElement>,
+		exercise?: Exercise
+	) => {
+		if (field === 'sets') {
+			setSupersetToAdd((oldstate) => ({
+				...oldstate,
+				sets: parseInt(event!.target.value),
+			}));
+			return;
+		}
+		if (field === 'exercise') {
+			if (supersetToAdd.firstExercise.exercise.name === '') {
+				setSupersetToAdd((oldstate) => ({
+					...oldstate,
+					firstExercise: {
+						...supersetToAdd.firstExercise,
+						exercise: exercise!,
+					},
+				}));
+				return;
+			}
+			if (supersetToAdd.secondExercise.exercise.name === '') {
+				setSupersetToAdd((oldstate) => ({
+					...oldstate,
+					secondExercise: {
+						...supersetToAdd.secondExercise,
+						exercise: exercise!,
+					},
+				}));
+				return;
+			}
+		}
+		// if (field === 'firstExercise.exercise') {
+		// 	setSupersetToAdd((oldstate) => ({
+		// 		...oldstate,
+		// 		firstExercise: { ...supersetToAdd.firstExercise, exercise: exercise! },
+		// 	}));
+		// 	return;
+		// }
+		// if (field === 'secondExercise.exercise') {
+		// 	setSupersetToAdd((oldstate) => ({
+		// 		...oldstate,
+		// 		secondExercise: {
+		// 			...supersetToAdd.secondExercise,
+		// 			exercise: exercise!,
+		// 		},
+		// 	}));
+		// 	return;
+		// }
+		if (field === 'firstExercise.repRange') {
+			setSupersetToAdd((oldstate) => ({
+				...oldstate,
+				firstExercise: {
+					...supersetToAdd.firstExercise,
+					repRange: event!.target.value,
+				},
+			}));
+			return;
+		}
+		if (field === 'secondExercise.repRange') {
+			setSupersetToAdd((oldstate) => ({
+				...oldstate,
+				secondExercise: {
+					...supersetToAdd.secondExercise,
+					repRange: event!.target.value,
+				},
+			}));
+			return;
+		}
+	};
+
 	const handleAddExerciseToList = () => {
 		if (exerciseToAdd.sets === 0 || exerciseToAdd.repRange === '') {
 			setModalErrorMessage('Fyll i fälten');
@@ -164,6 +259,18 @@ export const CreateWorkoutPage = () => {
 		exercisesList.push(exerciseToAdd);
 		setIsModalOpen(false);
 		setExerciseToAdd(defualtExerciseInstance);
+	};
+
+	const handleAddSupersetToList = () => {
+		if (supersetToAdd.sets === 0) {
+			setModalErrorMessage('Fyll i fälten');
+			return;
+		} else {
+			setModalErrorMessage('');
+		}
+		exercisesList.push(supersetToAdd);
+		setIsSupersetModalOpen(false);
+		setSupersetToAdd(defualtSupersetInstance);
 	};
 
 	const handleCreateWorkout = async () => {
@@ -264,6 +371,16 @@ export const CreateWorkoutPage = () => {
 					<Typography variant="h5" className={classes.label}>
 						Övningar
 					</Typography>
+					<Button
+						endIcon={<AddRounded />}
+						className={classes.headerButton}
+						color="secondary"
+						disableElevation
+						variant="contained"
+						onClick={handleSetSupersetModal}
+					>
+						Superset
+					</Button>
 				</Grid>
 				<Grid
 					container
@@ -311,24 +428,78 @@ export const CreateWorkoutPage = () => {
 						</Box>
 					)}
 					<Grid item container className={classes.exerciseListContainer}>
-						{exercisesList.map((exercise) => (
-							<Grid item container className={classes.exerciseToAddContainer}>
-								<Typography variant="body1">
-									{exercise.exercise.name}
-								</Typography>
+						{exercisesList.map((segment) =>
+							segment.firstExercise ? (
 								<Grid
 									item
 									container
-									className={classes.exerciseToAddInputContainer}
+									direction="column"
+									className={classes.supersetInListContainer}
 								>
-									<Typography variant="body1">{exercise.sets}</Typography>
-									<Typography variant="body1" className={classes.xSignList}>
-										×
-									</Typography>
-									<Typography variant="body1">{exercise.repRange}</Typography>
+									<Grid
+										item
+										container
+										className={classes.exerciseToAddContainer}
+									>
+										<Typography variant="body1">
+											{segment.firstExercise.exercise.name}
+										</Typography>
+										<Grid
+											item
+											container
+											className={classes.exerciseToAddInputContainer}
+										>
+											<Typography variant="body1">{segment.sets}</Typography>
+											<Typography variant="body1" className={classes.xSignList}>
+												×
+											</Typography>
+											<Typography variant="body1">
+												{segment.firstExercise.repRange}
+											</Typography>
+										</Grid>
+									</Grid>
+									<Grid
+										item
+										container
+										className={classes.exerciseToAddContainer}
+									>
+										<Typography variant="body1">
+											{segment.secondExercise.exercise.name}
+										</Typography>
+										<Grid
+											item
+											container
+											className={classes.exerciseToAddInputContainer}
+										>
+											<Typography variant="body1">{segment.sets}</Typography>
+											<Typography variant="body1" className={classes.xSignList}>
+												×
+											</Typography>
+											<Typography variant="body1">
+												{segment.secondExercise.repRange}
+											</Typography>
+										</Grid>
+									</Grid>
 								</Grid>
-							</Grid>
-						))}
+							) : (
+								<Grid item container className={classes.exerciseToAddContainer}>
+									<Typography variant="body1">
+										{segment.exercise.name}
+									</Typography>
+									<Grid
+										item
+										container
+										className={classes.exerciseToAddInputContainer}
+									>
+										<Typography variant="body1">{segment.sets}</Typography>
+										<Typography variant="body1" className={classes.xSignList}>
+											×
+										</Typography>
+										<Typography variant="body1">{segment.repRange}</Typography>
+									</Grid>
+								</Grid>
+							)
+						)}
 					</Grid>
 					<Typography variant="body1" className={classes.modalErrorText}>
 						{createErrorMessage}
@@ -345,10 +516,10 @@ export const CreateWorkoutPage = () => {
 					</Button>
 				</Grid>
 			</Grid>
-			{isModalOpen && (
+			{isExerciseModalOpen && (
 				<Modal
-					open={isModalOpen}
-					onClose={handleSetModal}
+					open={isExerciseModalOpen}
+					onClose={handleSetExerciseModal}
 					className={classes.modalContainer}
 				>
 					<Box>
@@ -390,8 +561,189 @@ export const CreateWorkoutPage = () => {
 					</Box>
 				</Modal>
 			)}
+			{isSupersetModalOpen && (
+				<Modal
+					open={isSupersetModalOpen}
+					onClose={handleSetSupersetModal}
+					className={classes.modalContainer}
+				>
+					<Box>
+						<Grid
+							item
+							container
+							direction="column"
+							className={classes.modalContentContainer}
+						>
+							<Grid item container>
+								<Typography
+									variant="h6"
+									className={classes.supersetModalHeading}
+								>
+									Lägg till Superset
+								</Typography>
+								<StyledTextField
+									placeholder="Sets"
+									onChange={(event) => handleUpdateSuperset('sets', event)}
+									tiny
+								/>
+							</Grid>
+							<StyledTextField
+								placeholder="Sök"
+								icon={{ element: <SearchRounded />, position: 'start' }}
+								onChange={handleSupersetChange}
+								onBlur={handleBlur}
+								value={searchValue}
+							/>
+							{supersetSearchResults.length > 0 && (
+								<Box className={classes.supersetSearchResultsContainer}>
+									{supersetSearchResults.map((exerciseInList) => (
+										<Grid item container className={classes.searchResult}>
+											<Grid item container>
+												<Typography variant="body1">
+													{exerciseInList.name}
+												</Typography>
+												{/* <Typography
+													variant="body1"
+													className={classes.searchResultSeparator}
+												>
+													/
+												</Typography>
+												<Typography
+													variant="body2"
+													className={classes.searchResultTargetMuscle}
+												>
+													{exercise.targetMuscles[0]}
+												</Typography> */}
+											</Grid>
+											<IconButton
+												className={classes.searchResultAddIconButton}
+												onClick={() =>
+													handleUpdateSuperset(
+														'exercise',
+														undefined,
+														exerciseInList
+													)
+												}
+											>
+												<AddRounded
+													className={classes.searchResultIcon}
+													fontSize="small"
+												/>
+											</IconButton>
+										</Grid>
+									))}
+								</Box>
+							)}
+							<Grid
+								item
+								container
+								className={classes.supersetModalExerciseListItem}
+							>
+								<Typography
+									variant="body1"
+									className={classes.supersetListExerciseName}
+								>
+									{supersetToAdd.firstExercise.exercise.name ||
+										'Ingen övning vald'}
+								</Typography>
+								<Grid item container className={classes.supersetListSetsXReps}>
+									<Typography>{supersetToAdd.sets || '?'}</Typography>
+									<Typography variant="body1" className={classes.xSign}>
+										×
+									</Typography>
+									<StyledTextField
+										placeholder="reps"
+										onChange={(event) =>
+											handleUpdateSuperset('firstExercise.repRange', event)
+										}
+										small
+									/>
+								</Grid>
+							</Grid>
+							<Grid
+								item
+								container
+								className={classes.supersetModalExerciseListItem}
+							>
+								<Typography
+									variant="body1"
+									className={classes.supersetListExerciseName}
+								>
+									{supersetToAdd.secondExercise.exercise.name ||
+										'Ingen övning vald'}
+								</Typography>
+								<Grid item container className={classes.supersetListSetsXReps}>
+									<Typography>{supersetToAdd.sets || '?'}</Typography>
+									<Typography variant="body1" className={classes.xSign}>
+										×
+									</Typography>
+									<StyledTextField
+										placeholder="reps"
+										onChange={(event) =>
+											handleUpdateSuperset('secondExercise.repRange', event)
+										}
+										small
+									/>
+								</Grid>
+							</Grid>
+							<Typography variant="body1" className={classes.modalErrorText}>
+								{modalErrorMessage}
+							</Typography>
+							<Button
+								variant="contained"
+								color="primary"
+								className={classes.addExerciseButton}
+								onClick={handleAddSupersetToList}
+								fullWidth
+							>
+								Lägg till
+							</Button>
+						</Grid>
+					</Box>
+				</Modal>
+			)}
 		</Page>
 	);
 };
 
 export default CreateWorkoutPage;
+
+/* <StyledTextField
+	placeholder="Sök"
+	icon={{ element: <SearchRounded />, position: 'start' }}
+	onChange={handleChange}
+	onBlur={handleBlur}
+	value={searchValue}
+/>
+{searchResults.length > 0 && (
+	<Box className={classes.searchResultsContainer}>
+		{searchResults.map((exercise) => (
+			<Grid item container className={classes.searchResult}>
+				<Grid item container>
+					<Typography variant="body1">{exercise.name}</Typography>
+					<Typography
+						variant="body1"
+						className={classes.searchResultSeparator}
+					>
+						/
+					</Typography>
+					<Typography
+						variant="body2"
+						className={classes.searchResultTargetMuscle}
+					>
+						{exercise.targetMuscles[0]}
+					</Typography>
+				</Grid>
+				<IconButton
+					className={classes.searchResultAddIconButton}
+					onClick={() => handleSetActiveExercise(exercise)}
+				>
+					<AddRounded
+						className={classes.searchResultIcon}
+						fontSize="small"
+					/>
+				</IconButton>
+			</Grid>
+		))}
+	</Box>
+)} */

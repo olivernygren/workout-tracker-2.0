@@ -201,11 +201,13 @@ export default makeStyles((theme) => ({
 		padding: 20,
 		borderRadius: 10,
 		boxShadow: '0px 0px 15px 2px #101010',
+		position: 'relative',
 	},
 	modalTextFieldContainer: {
 		flex: 1,
 		flexWrap: 'nowrap',
 		alignItems: 'center',
+		marginTop: 16,
 	},
 	modalExerciseName: {
 		marginBottom: 20,
@@ -213,5 +215,47 @@ export default makeStyles((theme) => ({
 	modalErrorText: {
 		color: theme.palette.error.main,
 		marginTop: 10,
+	},
+	supersetSearchResultsContainer: {
+		position: 'absolute',
+		left: 20,
+		right: 20,
+		top: 130,
+		zIndex: 10,
+		height: 'fit-content',
+		backgroundColor: theme.palette.secondary.light,
+		borderRadius: 10,
+		padding: 10,
+		maxHeight: 150,
+		overflowY: 'scroll',
+	},
+	supersetModalExerciseListItem: {
+		flex: 1,
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		flexWrap: 'nowrap',
+		marginTop: 10,
+	},
+	supersetListExerciseName: {
+		width: 'fit-content',
+	},
+	supersetListSetsXReps: {
+		width: 'fit-content',
+		alignItems: 'center',
+		// marginLeft: 'auto',
+	},
+	supersetModalHeader: {
+		alignItems: 'center',
+		justifyContent: 'space-between',
+	},
+	supersetModalHeading: {
+		marginBottom: 20,
+		marginRight: 'auto',
+	},
+	supersetInListContainer: {
+		border: '1px solid' + theme.palette.secondary.main,
+		borderRadius: 8,
+		padding: '5px 10px',
+		marginBottom: 6,
 	},
 }));

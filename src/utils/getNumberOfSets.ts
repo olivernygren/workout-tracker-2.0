@@ -5,7 +5,7 @@ export const getNumberOfSets = (workout: Workout | DocumentData) => {
 	const setsArray: number[] = [];
 	// workouts.forEach((workout) => {
 	workout.exercises.forEach((exercise: ExerciseInstance) => {
-		setsArray.push(exercise.sets);
+		setsArray.push(exercise.sets!);
 	});
 	// });
 	if (setsArray.length > 1) {

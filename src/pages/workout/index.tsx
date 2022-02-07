@@ -5,9 +5,14 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { collection, DocumentData, getDocs } from '@firebase/firestore';
 
 import useStyles from './styles';
-import { ExerciseCard, Page, Spinner, TitleHeader } from '../../components';
+import {
+	ExerciseCard,
+	Page,
+	Spinner,
+	SupersetCard,
+	TitleHeader,
+} from '../../components';
 import { pathToWorkoutNameConverter } from '../../utils';
-import { ExerciseInstance } from '../../types';
 import { db } from '../../firebase-config';
 
 export const WorkoutPage = () => {
@@ -67,14 +72,23 @@ export const WorkoutPage = () => {
 	// 		workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
 	// );
 	const ExerciseList = () => {
-		return workout!.exercises.map((exercise: ExerciseInstance) => (
-			<ExerciseCard
-				exercise={exercise.exercise.name}
-				sets={exercise.sets}
-				repRange={exercise.repRange}
-				key={exercise.exercise.name}
-			/>
-		));
+		const exerciseArray = workout!.exercises.map((segment: any) =>
+			segment.firstExercise ? (
+				<SupersetCard
+					firstExercise={segment.firstExercise}
+					secondExercise={segment.secondExercise}
+					sets={segment.sets}
+				/>
+			) : (
+				<ExerciseCard
+					exercise={segment.exercise.name}
+					sets={segment.sets!}
+					repRange={segment.repRange}
+					key={segment.exercise.name}
+				/>
+			)
+		);
+		return exerciseArray;
 	};
 
 	return (
