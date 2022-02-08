@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, CircularProgress } from '@material-ui/core';
 import { EditRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { collection, DocumentData, getDocs } from '@firebase/firestore';
@@ -8,7 +8,6 @@ import useStyles from './styles';
 import {
 	ExerciseCard,
 	Page,
-	Spinner,
 	SupersetCard,
 	TitleHeader,
 } from '../../components';
@@ -29,10 +28,8 @@ export const WorkoutPage = () => {
 		path: '',
 		createdAt: '',
 	});
-	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		// setIsLoading(true);
 		const getWorkouts = async () => {
 			const data = await getDocs(workoutsCollectionRef);
 			const workouts = data.docs.map((doc) => doc.data());
@@ -46,7 +43,6 @@ export const WorkoutPage = () => {
 			setWorkout(matchingWorkout!);
 		};
 		getWorkouts();
-		setIsLoading(false);
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
@@ -67,10 +63,6 @@ export const WorkoutPage = () => {
 		navigateTo('/link');
 	};
 
-	// const workoutObject = sortedWorkouts.find(
-	// 	(workout) =>
-	// 		workout.name.toLowerCase() === workoutNameFromPath.toLowerCase()
-	// );
 	const ExerciseList = () => {
 		const exerciseArray = workout!.exercises.map((segment: any) =>
 			segment.firstExercise ? (
@@ -103,7 +95,13 @@ export const WorkoutPage = () => {
 				/>
 			</Grid>
 			<Grid item container direction="column" className={classes.cardContainer}>
-				{isLoading ? <Spinner /> : <ExerciseList />}
+				{workout.exercises.length === 0 ? (
+					<Grid item container className={classes.spinnerContainer}>
+						<CircularProgress className={classes.spinner} />
+					</Grid>
+				) : (
+					<ExerciseList />
+				)}
 			</Grid>
 		</Page>
 	);

@@ -1,6 +1,13 @@
 import { useEffect, useState } from 'react';
 // import { useNavigate } from 'react-router-dom';
-import { Grid, Button, Typography, Modal, Box } from '@material-ui/core';
+import {
+	Grid,
+	Button,
+	Typography,
+	Modal,
+	Box,
+	CircularProgress,
+} from '@material-ui/core';
 import { AddRounded } from '@material-ui/icons';
 import { collection, DocumentData, getDocs, addDoc } from 'firebase/firestore';
 
@@ -98,7 +105,7 @@ export const BodyweightPage = () => {
 				/>
 			</Grid>
 			<Grid item container direction="column" className={classes.container}>
-				{weightLogs.length > 0 &&
+				{weightLogs.length > 0 ? (
 					weightLogs.map((log) => (
 						<Grid item container className={classes.listItem}>
 							<Typography variant="subtitle1">
@@ -111,7 +118,12 @@ export const BodyweightPage = () => {
 								<ScaleIcon className={classes.icon} />
 							</Grid>
 						</Grid>
-					))}
+					))
+				) : (
+					<Grid item container className={classes.spinnerContainer}>
+						<CircularProgress className={classes.spinner} />
+					</Grid>
+				)}
 			</Grid>
 			{isModalOpen && (
 				<Modal

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, CircularProgress } from '@material-ui/core';
 import { AddRounded } from '@material-ui/icons';
 import { useNavigate } from 'react-router-dom';
 import { collection, getDocs } from 'firebase/firestore';
@@ -68,16 +68,22 @@ export const AllWorkoutsPage = () => {
 				/>
 			</Grid>
 			<Grid item container direction="column" className={classes.cardContainer}>
-				{workoutsFromDB.map((workout: Workout) => {
-					return (
-						<WorkoutCard
-							name={workout.name}
-							sets={getNumberOfSets(workout)}
-							path={workoutNameToPathConverter(workout.name)}
-							key={workout.createdAt!}
-						/>
-					);
-				})}
+				{workoutsFromDB.length > 0 ? (
+					workoutsFromDB.map((workout: Workout) => {
+						return (
+							<WorkoutCard
+								name={workout.name}
+								sets={getNumberOfSets(workout)}
+								path={workoutNameToPathConverter(workout.name)}
+								key={workout.createdAt!}
+							/>
+						);
+					})
+				) : (
+					<Grid item container className={classes.spinnerContainer}>
+						<CircularProgress className={classes.spinner} />
+					</Grid>
+				)}
 			</Grid>
 		</Page>
 	);

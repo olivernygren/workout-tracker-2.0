@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, CircularProgress } from '@material-ui/core';
 import { ChevronRightRounded } from '@material-ui/icons';
 import { getDocs, collection, DocumentData } from '@firebase/firestore';
 
@@ -47,14 +47,20 @@ export const HomePage = () => {
 			<Grid item container direction="column">
 				<TitleHeader title="Dina pass" button={<HeaderButton />} />
 				<Grid item container className={classes.workoutCardContainer}>
-					{workoutsFromDB.map((workout) => (
-						<HomeWorkoutCard
-							name={workout.name}
-							exercises={workout.exercises.length}
-							sets={getNumberOfSets(workout)}
-							key={workout.name}
-						/>
-					))}
+					{workoutsFromDB.length > 0 ? (
+						workoutsFromDB.map((workout) => (
+							<HomeWorkoutCard
+								name={workout.name}
+								exercises={workout.exercises.length}
+								sets={getNumberOfSets(workout)}
+								key={workout.name}
+							/>
+						))
+					) : (
+						<Grid item container className={classes.spinnerContainer}>
+							<CircularProgress className={classes.spinner} />
+						</Grid>
+					)}
 				</Grid>
 				<Grid item container className={classes.cardContainer}>
 					{homePageCards.map((card) => (

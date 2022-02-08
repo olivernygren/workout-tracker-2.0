@@ -648,7 +648,7 @@ export const CreateWorkoutPage = () => {
 								</Typography>
 								<Grid item container className={classes.supersetListSetsXReps}>
 									<Typography>{supersetToAdd.sets || '?'}</Typography>
-									<Typography variant="body1" className={classes.xSign}>
+									<Typography variant="body1" className={classes.xSignSuperset}>
 										×
 									</Typography>
 									<StyledTextField
@@ -674,7 +674,7 @@ export const CreateWorkoutPage = () => {
 								</Typography>
 								<Grid item container className={classes.supersetListSetsXReps}>
 									<Typography>{supersetToAdd.sets || '?'}</Typography>
-									<Typography variant="body1" className={classes.xSign}>
+									<Typography variant="body1" className={classes.xSignSuperset}>
 										×
 									</Typography>
 									<StyledTextField

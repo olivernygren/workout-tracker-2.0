@@ -92,4 +92,13 @@ export default makeStyles((theme) => ({
 			color: theme.palette.grey[600],
 		},
 	},
+	spinnerContainer: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+	},
+	spinner: {
+		margin: '0 auto',
+	},
 }));

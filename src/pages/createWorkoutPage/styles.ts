@@ -149,6 +149,7 @@ export default makeStyles((theme) => ({
 	confirmButton: {
 		borderRadius: 20,
 		position: 'fixed',
+		zIndex: 20,
 		bottom: 20,
 		width: 'calc(100% - 32px)',
 		paddingTop: 8,
@@ -187,6 +188,9 @@ export default makeStyles((theme) => ({
 	xSign: {
 		margin: '0 20px',
 	},
+	xSignSuperset: {
+		margin: '0 13px',
+	},
 	xSignList: {
 		margin: '0 10px',
 	},
@@ -210,7 +214,7 @@ export default makeStyles((theme) => ({
 		marginTop: 16,
 	},
 	modalExerciseName: {
-		marginBottom: 20,
+		marginBottom: 5,
 	},
 	modalErrorText: {
 		color: theme.palette.error.main,

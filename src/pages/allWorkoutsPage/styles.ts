@@ -15,4 +15,13 @@ export default makeStyles((theme) => ({
 	titleHeaderContainer: {
 		height: 'fit-content',
 	},
+	spinnerContainer: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+	},
+	spinner: {
+		margin: '0 auto',
+	},
 }));

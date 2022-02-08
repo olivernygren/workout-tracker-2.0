@@ -11,4 +11,13 @@ export default makeStyles((theme) => ({
 	cardContainer: {
 		marginTop: 30,
 	},
+	spinnerContainer: {
+		position: 'absolute',
+		top: '50%',
+		left: '50%',
+		transform: 'translate(-50%, -50%)',
+	},
+	spinner: {
+		margin: '0 auto',
+	},
 }));

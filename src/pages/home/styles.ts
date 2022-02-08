@@ -7,12 +7,18 @@ export default makeStyles((theme) => ({
 	},
 	workoutCardContainer: {
 		overflowX: 'scroll',
-		// overflowY: 'visible',
 		paddingBottom: 30,
 		flexWrap: 'nowrap',
 		marginTop: 20,
 	},
 	cardContainer: {
 		marginTop: 30,
+	},
+	spinnerContainer: {
+		alignItems: 'center',
+		justifyContent: 'center',
+	},
+	spinner: {
+		margin: '0 auto',
 	},
 }));
