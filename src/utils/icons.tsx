@@ -5,6 +5,10 @@ import cardio from '../icons/cardio.svg';
 import checklist from '../icons/checklist.svg';
 import evaluation from '../icons/evaluation.svg';
 import scale from '../icons/scale.svg';
+import pill from '../icons/pill.svg';
+import house from '../icons/house.svg';
+import food from '../icons/food.svg';
+import scaleSmall from '../icons/scale-small.svg';
 
 interface IIcon {
 	className?: string;
@@ -29,5 +33,17 @@ export const EvaluationIcon = ({ className }: IIcon) => {
 	return <img className={className} src={evaluation} alt="Utvärdering"></img>;
 };
 export const ScaleIcon = ({ className }: IIcon) => {
-	return <img className={className} src={scale} alt="Utvärdering"></img>;
+	return <img className={className} src={scale} alt="Våg"></img>;
+};
+export const PillIcon = ({ className }: IIcon) => {
+	return <img className={className} src={pill} alt="Piller"></img>;
+};
+export const FoodIcon = ({ className }: IIcon) => {
+	return <img className={className} src={food} alt="Mat"></img>;
+};
+export const HomeIcon = ({ className }: IIcon) => {
+	return <img className={className} src={house} alt="Hushåll"></img>;
+};
+export const ScaleSmallIcon = ({ className }: IIcon) => {
+	return <img className={className} src={scaleSmall} alt="Våg liten"></img>;
 };

@@ -9,6 +9,6 @@ export default makeStyles((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'space-between',
 		width: '100%',
-		marginBottom: 16,
+		marginBottom: 12,
 	},
 }));

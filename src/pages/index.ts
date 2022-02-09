@@ -4,5 +4,7 @@ export * from './workout';
 export * from './createWorkoutPage';
 export * from './progressPage';
 export * from './exerciseProgressPage';
+export * from './addChecklistItemPage';
+export * from './checklistPage';
 export * from './createExerciseForDB';
 export * from './bodyweightPage';

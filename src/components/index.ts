@@ -8,5 +8,6 @@ export * from './titleHeader';
 export * from './workoutCard';
 export * from './exerciseCard';
 export * from './supersetCard';
+export * from './checklistItem';
 export * from './muiTextField';
 export * from './progress';

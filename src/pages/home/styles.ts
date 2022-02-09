@@ -12,7 +12,7 @@ export default makeStyles((theme) => ({
 		marginTop: 20,
 	},
 	cardContainer: {
-		marginTop: 30,
+		marginTop: 24,
 	},
 	spinnerContainer: {
 		alignItems: 'center',

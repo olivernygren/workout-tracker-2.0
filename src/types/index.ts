@@ -53,7 +53,7 @@ export type WeightRecord = {
 	weight: number;
 };
 
-export type ChecklistItem = {
+export type ChecklistItemRecord = {
 	label: string;
 	category: string;
 	checked: boolean;

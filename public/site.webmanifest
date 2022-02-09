@@ -1,6 +1,6 @@
 {
-    "name": "Life Assistant",
-    "short_name": "Life Assistant",
+    "name": "",
+    "short_name": "",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -13,7 +13,7 @@
             "type": "image/png"
         }
     ],
-    "theme_color": "#43ac54",
-    "background_color": "#43ac54",
+    "theme_color": "#202020",
+    "background_color": "#202020",
     "display": "standalone"
 }

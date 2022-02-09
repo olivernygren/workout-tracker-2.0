@@ -7,6 +7,8 @@ import {
 	ExerciseProgressPage,
 	CreateExercisePage,
 	BodyweightPage,
+	ChecklistPage,
+	AddChecklistItemPage,
 } from '../pages';
 
 export const routes = [
@@ -41,5 +43,13 @@ export const routes = [
 	{
 		path: '/weight',
 		element: <BodyweightPage />,
+	},
+	{
+		path: '/checklist',
+		element: <ChecklistPage />,
+	},
+	{
+		path: '/add-checklist-item',
+		element: <AddChecklistItemPage />,
 	},
 ];
