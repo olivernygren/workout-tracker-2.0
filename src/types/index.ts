@@ -57,6 +57,7 @@ export type ChecklistItemRecord = {
 	label: string;
 	category: string;
 	checked: boolean;
+	id: string;
 };
 
 export type EvaluationRecord = {

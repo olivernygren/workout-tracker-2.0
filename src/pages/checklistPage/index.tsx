@@ -17,13 +17,27 @@ export const ChecklistPage = () => {
 	const [items, setItems] = useState<ChecklistItemRecord[] | DocumentData[]>(
 		[]
 	);
-	// const [id, setId] = useState<string>('');
 
 	useEffect(() => {
 		const getChecklistItems = async () => {
 			const data = await getDocs(collectionRef);
-			const itemsFromDB = data.docs.map((doc) => doc.data());
-			itemsFromDB.forEach((item) => {
+			const itemsFromDB = data.docs.map((doc) => ({
+				...doc.data(),
+				id: doc.id,
+			}));
+			const sortedItems = itemsFromDB.sort(
+				(
+					a: ChecklistItemRecord | DocumentData,
+					b: ChecklistItemRecord | DocumentData
+				) => {
+					const categoryA = a.category.toLowerCase(),
+						categoryB = b.category.toLowerCase();
+					if (categoryA < categoryB) return -1;
+					if (categoryA > categoryB) return 1;
+					return 0;
+				}
+			);
+			sortedItems.forEach((item) => {
 				setItems((oldstate) => [...oldstate, item]);
 			});
 		};
@@ -56,6 +70,10 @@ export const ChecklistPage = () => {
 
 	const handleReset = async () => {
 		// navigateTo('/create-checklist-item');
+		const resetedItems = items.forEach((item) => {
+			setItems((oldstate) => [...oldstate, { ...item, checked: false }]);
+		});
+		console.log(resetedItems);
 	};
 
 	return (
@@ -80,7 +98,8 @@ export const ChecklistPage = () => {
 							label={item.label}
 							category={item.category}
 							checked={item.checked}
-							// id={id}
+							id={item.id}
+							key={item.id}
 						/>
 					))
 				) : (
