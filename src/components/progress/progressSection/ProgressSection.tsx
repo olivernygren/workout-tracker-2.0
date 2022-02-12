@@ -24,7 +24,7 @@ import { useParams } from 'react-router-dom';
 import { db } from '../../../firebase-config';
 import { ProgressInstance, ProgressSegment } from '../../../types';
 import { formatDate, pathToExerciseNameConverter } from '../../../utils';
-import { StyledTextField } from '../../muiTextField';
+import { StyledTextField } from '../../StyledTextField';
 import useStyles from './styles';
 
 interface IProgressSection {

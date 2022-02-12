@@ -1,6 +1,6 @@
 import { Grid, Typography } from '@material-ui/core';
 import React from 'react';
-import { NavigateBackButton } from '../navigateBackButton';
+import { NavigateBackButton } from '../navigate-back-button';
 
 import useStyles from './styles';
 
