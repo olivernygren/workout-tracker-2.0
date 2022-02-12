@@ -50,10 +50,20 @@ export default makeStyles((theme) => ({
 		// backgroundColor: '#303030',
 		// alignSelf: 'end'
 	},
+	disableOutline: {
+		outline: 'none',
+	},
 	modalContainer: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+		outline: 'none',
+		'&:focus': {
+			outline: 'none',
+		},
+		'&.Mui-focused': {
+			outline: 'none',
+		},
 	},
 	modalContentContainer: {
 		backgroundColor: theme.palette.secondary.dark,

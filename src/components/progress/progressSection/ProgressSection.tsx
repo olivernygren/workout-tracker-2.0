@@ -165,7 +165,7 @@ IProgressSection) => {
 					// onClose={handleSetNotesModal}
 					className={classes.modalContainer}
 				>
-					<Box>
+					<Box className={classes.disableOutline}>
 						<Grid
 							item
 							container

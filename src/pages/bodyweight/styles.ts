@@ -30,6 +30,9 @@ export default makeStyles((theme) => ({
 		height: 22,
 		width: 22,
 	},
+	disableOutline: {
+		outline: 'none',
+	},
 	modalContainer: {
 		display: 'flex',
 		alignItems: 'center',

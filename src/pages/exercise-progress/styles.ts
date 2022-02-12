@@ -15,10 +15,20 @@ export default makeStyles((theme) => ({
 	container: {
 		marginTop: 30,
 	},
+	disableOutline: {
+		outline: 'none',
+	},
 	modalContainer: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+		outline: 'none',
+		'&:focus': {
+			outline: 'none',
+		},
+		'&.Mui-focused': {
+			outline: 'none',
+		},
 	},
 	modalContentContainer: {
 		backgroundColor: theme.palette.secondary.dark,
@@ -83,32 +93,11 @@ export default makeStyles((theme) => ({
 	setsButtonContainer: {
 		alignItems: 'center',
 		marginTop: 12,
-		// width: 'fit-content',
-		// flex: 1,
 	},
-	// addSetsButton: {
-	// 	backgroundColor: theme.palette.secondary.main,
-	// 	color: theme.palette.common.white,
-	// 	'&:hover': {
-	// 		backgroundColor: theme.palette.secondary.main,
-	// 	},
-	// 	padding: '0.4em 1em',
-	// 	borderRadius: 30,
-	// 	fontSize: 13,
-	// 	width: 'fit-content',
-	// },
-	// reduceSetsButton: {
-	// 	padding: '7px',
-	// 	marginLeft: 6,
-	// 	backgroundColor: theme.palette.secondary.main,
-	// 	height: 'fit-content',
-	// 	color: theme.palette.common.white,
-	// },
 	setsIconButton: {
 		color: theme.palette.common.white,
 		backgroundColor: theme.palette.secondary.main,
 		padding: 6,
-		// borderRadius: 0,
 		'&.MuiButtonGroup-groupedHorizontal:not(:last-child)': {
 			borderTopLeftRadius: 10,
 			borderBottomLeftRadius: 10,

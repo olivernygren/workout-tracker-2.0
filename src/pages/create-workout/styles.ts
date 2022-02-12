@@ -194,10 +194,20 @@ export default makeStyles((theme) => ({
 	xSignList: {
 		margin: '0 10px',
 	},
+	disableOutline: {
+		outline: 'none',
+	},
 	modalContainer: {
 		display: 'flex',
 		alignItems: 'center',
 		justifyContent: 'center',
+		outline: 'none',
+		'&:focus': {
+			outline: 'none',
+		},
+		'&.Mui-focused': {
+			outline: 'none',
+		},
 	},
 	modalContentContainer: {
 		backgroundColor: theme.palette.secondary.dark,

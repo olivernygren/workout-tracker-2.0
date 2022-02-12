@@ -126,7 +126,6 @@ export const ExerciseProgressPage = () => {
 		);
 
 		if (dateExists) {
-			// console.log(dateExists.date + ' finns redan, lägger till ny instance');
 			const docRef = doc(db, 'exercises', id);
 			const updatedInstance = {
 				...dateExists!,
@@ -148,7 +147,6 @@ export const ExerciseProgressPage = () => {
 			});
 			setIsModalOpen(false);
 		} else {
-			// console.log('finns ej, lägger till nytt segment');
 			const docRef = doc(db, 'exercises', id);
 			await updateDoc(docRef, {
 				progress: [
@@ -192,7 +190,7 @@ export const ExerciseProgressPage = () => {
 					onClose={handleSetModal}
 					className={classes.modalContainer}
 				>
-					<Box>
+					<Box className={classes.disableOutline}>
 						<Grid
 							item
 							container
@@ -213,12 +211,6 @@ export const ExerciseProgressPage = () => {
 										defaultValue={todaysDate}
 										onChange={(event) => handleUpdateDateValue(event)}
 									/>
-									{/* <IconButton
-										onClick={() => setIsModalOpen(false)}
-										className={classes.modalCloseIcon}
-									>
-										<CloseRounded />
-									</IconButton> */}
 								</Grid>
 							</Grid>
 							<Grid item container className={classes.modalTextFieldContainer}>

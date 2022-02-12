@@ -154,7 +154,7 @@ export const BodyweightPage = () => {
 					onClose={handleSetModal}
 					className={classes.modalContainer}
 				>
-					<Box>
+					<Box className={classes.disableOutline}>
 						<Grid
 							item
 							container
@@ -175,12 +175,6 @@ export const BodyweightPage = () => {
 										defaultValue={todaysDate}
 										onChange={(event) => handleUpdateDateValue(event)}
 									/>
-									{/* <IconButton
-										onClick={() => setIsModalOpen(false)}
-										className={classes.modalCloseIcon}
-									>
-										<CloseRounded />
-									</IconButton> */}
 								</Grid>
 							</Grid>
 							{/* <Grid item container className={classes.modalTextFieldContainer}> */}
@@ -188,10 +182,6 @@ export const BodyweightPage = () => {
 								placeholder="kg"
 								onChange={(event) => handleUpdateWeightValue(event)}
 							/>
-							{/* </Grid> */}
-							{/* <Typography variant="body1" className={classes.modalErrorText}>
-								{modalErrorMessage}
-							</Typography> */}
 							<Button
 								variant="contained"
 								color="primary"

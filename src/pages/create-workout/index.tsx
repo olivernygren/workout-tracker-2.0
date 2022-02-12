@@ -522,7 +522,7 @@ export const CreateWorkoutPage = () => {
 					onClose={handleSetExerciseModal}
 					className={classes.modalContainer}
 				>
-					<Box>
+					<Box className={classes.disableOutline}>
 						<Grid
 							item
 							container
@@ -567,7 +567,7 @@ export const CreateWorkoutPage = () => {
 					onClose={handleSetSupersetModal}
 					className={classes.modalContainer}
 				>
-					<Box>
+					<Box className={classes.disableOutline}>
 						<Grid
 							item
 							container
