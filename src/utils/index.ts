@@ -8,3 +8,4 @@ export * from './getNumberOfSets';
 export * from './converters';
 export * from './exerciseDataBase';
 export * from './checklistHelpers';
+export * from './chunk';

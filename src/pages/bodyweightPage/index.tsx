@@ -20,6 +20,7 @@ import {
 	dotToCommaConverter,
 	formatDate,
 	ScaleIcon,
+	chunk,
 } from '../../utils';
 
 export const BodyweightPage = () => {
@@ -33,11 +34,12 @@ export const BodyweightPage = () => {
 		today.getDate()
 	)}`;
 	const [date, setDate] = useState<string>(todaysDate);
-	const [weightLogs, setWeightLogs] = useState<WeightRecord[] | DocumentData[]>(
-		[]
-	);
+	const [weightLogs, setWeightLogs] = useState<
+		WeightRecord[] | DocumentData[] | any[]
+	>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [weight, setWeight] = useState('');
+	const weeks = chunk(weightLogs, 2);
 
 	const collectionRef = collection(db, 'bodyweight');
 
@@ -66,6 +68,27 @@ export const BodyweightPage = () => {
 			Lägg till
 		</Button>
 	);
+
+	// const weightLogsPerWeek = 7;
+	// const indexOfLastLog = currentPage * logsPerPage;
+	// const indexOfFirstLog = indexOfLastLog - logsPerPage;
+	// const currentLogs = allLogs.slice(indexOfFirstLog, indexOfLastLog);
+	// if (weightLogs.length >= 7) {
+	// 	const perWeek = weightLogs.slice(0, 7);
+	// 	// console.log(perWeek);
+	// } else {
+	// 	const perWeek = weightLogs.slice(0, weightLogs.length);
+	// 	// console.log(perWeek);
+	// }
+
+	// console.log(weeks);
+	weeks.map((week: WeightRecord[]) => {
+		// sammanfattning
+		return week.forEach((day, index) => {
+			console.log(index + 1, day.date, day);
+		});
+		// console.log(week);
+	});
 
 	const handleSetModal = () => {
 		setIsModalOpen(!isModalOpen);
