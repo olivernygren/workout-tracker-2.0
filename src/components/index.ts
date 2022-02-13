@@ -11,3 +11,4 @@ export * from './superset-card';
 export * from './checklist-item';
 export * from './StyledTextField';
 export * from './progress';
+export * from './weekly-bodyweight';

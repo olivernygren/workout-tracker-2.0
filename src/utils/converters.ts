@@ -60,6 +60,15 @@ export const formatDate = (date: string) => {
 	return dateToReturn;
 };
 
+export const formatDateShort = (date: string) => {
+	const month = date.substring(2, 4);
+	const day = date.substring(4, 6);
+	const dateToReturn = `${removeZero(day)} ${getMonthName(month)
+		.substring(0, 3)
+		.toLowerCase()}`;
+	return dateToReturn;
+};
+
 export const getMonthName = (month: string) => {
 	switch (month) {
 		case '01':
@@ -93,14 +102,12 @@ export const getMonthName = (month: string) => {
 
 export const getCurrentTime = () => {
 	const today = new Date();
-	// console.log(today);
 	const year = today.getFullYear();
 	const month = today.getMonth();
 	const date = today.getDate();
 	const hours = today.getHours();
 	const minutes = today.getMinutes();
 	const seconds = today.getSeconds();
-	// console.log(year, month, date, hours, minutes, seconds);
 	const fullString = `${year}${addZero(month + 1)}${addZero(date)}${addZero(
 		hours
 	)}${addZero(minutes)}${addZero(seconds)}`;

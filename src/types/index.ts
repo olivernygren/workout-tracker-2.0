@@ -50,7 +50,7 @@ export type SleepRecord = {
 
 export type WeightRecord = {
 	date: string;
-	weight: number;
+	weight: string;
 };
 
 export type ChecklistItemRecord = {

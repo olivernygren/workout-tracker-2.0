@@ -9,7 +9,7 @@ export default makeStyles((theme) => ({
 		alignSelf: 'center',
 	},
 	container: {
-		marginTop: 30,
+		marginTop: 20,
 	},
 	listItem: {
 		alignItems: 'center',

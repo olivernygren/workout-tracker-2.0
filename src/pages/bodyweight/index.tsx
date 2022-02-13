@@ -12,20 +12,18 @@ import { AddRounded } from '@material-ui/icons';
 import { collection, DocumentData, getDocs, addDoc } from 'firebase/firestore';
 
 import useStyles from './styles';
-import { Page, StyledTextField, TitleHeader } from '../../components';
+import {
+	Page,
+	StyledTextField,
+	TitleHeader,
+	WeeklyBodyweight,
+} from '../../components';
 import { WeightRecord } from '../../types';
 import { db } from '../../firebase-config';
-import {
-	addZero,
-	dotToCommaConverter,
-	formatDate,
-	ScaleIcon,
-	chunk,
-} from '../../utils';
+import { addZero, formatDate, ScaleIcon, chunk } from '../../utils';
 
 export const BodyweightPage = () => {
 	const classes = useStyles();
-	// const navigateTo = useNavigate();
 	const today = new Date();
 	const todaysDate = `${today
 		.getFullYear()
@@ -39,7 +37,7 @@ export const BodyweightPage = () => {
 	>([]);
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const [weight, setWeight] = useState('');
-	const weeks = chunk(weightLogs, 2);
+	const weeks = chunk([...weightLogs].reverse(), 7);
 
 	const collectionRef = collection(db, 'bodyweight');
 
@@ -69,26 +67,32 @@ export const BodyweightPage = () => {
 		</Button>
 	);
 
-	// const weightLogsPerWeek = 7;
-	// const indexOfLastLog = currentPage * logsPerPage;
-	// const indexOfFirstLog = indexOfLastLog - logsPerPage;
-	// const currentLogs = allLogs.slice(indexOfFirstLog, indexOfLastLog);
-	// if (weightLogs.length >= 7) {
-	// 	const perWeek = weightLogs.slice(0, 7);
-	// 	// console.log(perWeek);
-	// } else {
-	// 	const perWeek = weightLogs.slice(0, weightLogs.length);
-	// 	// console.log(perWeek);
-	// }
-
-	// console.log(weeks);
-	weeks.map((week: WeightRecord[]) => {
-		// sammanfattning
-		return week.forEach((day, index) => {
-			console.log(index + 1, day.date, day);
-		});
-		// console.log(week);
-	});
+	const WeeklyList = () => {
+		return (
+			<>
+				{[...weeks].reverse().map((week: WeightRecord[]) => {
+					return (
+						<>
+							<WeeklyBodyweight weightLogs={week} />
+							{[...week].reverse().map((day: WeightRecord) => (
+								<Grid item container className={classes.listItem}>
+									<Typography variant="subtitle1">
+										{formatDate(day.date)}
+									</Typography>
+									<Grid item container className={classes.weightContainer}>
+										<Typography variant="body1" className={classes.weight}>
+											{day.weight + ' kg'}
+										</Typography>
+										<ScaleIcon className={classes.icon} />
+									</Grid>
+								</Grid>
+							))}
+						</>
+					);
+				})}
+			</>
+		);
+	};
 
 	const handleSetModal = () => {
 		setIsModalOpen(!isModalOpen);
@@ -129,19 +133,7 @@ export const BodyweightPage = () => {
 			</Grid>
 			<Grid item container direction="column" className={classes.container}>
 				{weightLogs.length > 0 ? (
-					weightLogs.map((log) => (
-						<Grid item container className={classes.listItem}>
-							<Typography variant="subtitle1">
-								{formatDate(log.date)}
-							</Typography>
-							<Grid item container className={classes.weightContainer}>
-								<Typography variant="body1" className={classes.weight}>
-									{dotToCommaConverter(log.weight) + ' kg'}
-								</Typography>
-								<ScaleIcon className={classes.icon} />
-							</Grid>
-						</Grid>
-					))
+					<WeeklyList />
 				) : (
 					<Grid item container className={classes.spinnerContainer}>
 						<CircularProgress className={classes.spinner} />
