@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Grid, Button, CircularProgress } from '@material-ui/core';
-import { DeleteRounded, EditRounded } from '@material-ui/icons';
+import { DeleteRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { collection, DocumentData, getDocs, doc } from '@firebase/firestore';
 
@@ -13,7 +13,7 @@ import {
 } from '../../components';
 import { pathToWorkoutNameConverter } from '../../utils';
 import { db } from '../../firebase-config';
-import { deleteDoc, QueryDocumentSnapshot } from 'firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
 import { Workout } from '../../types';
 
 export const WorkoutPage = () => {
