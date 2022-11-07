@@ -5,7 +5,7 @@ import { Header } from './components';
 import { routes } from './routes';
 import theme from './theme';
 
-function App() {
+const App = () => {
   return (
     <ThemeProvider theme={theme}>
       <BrowserRouter>
@@ -18,4 +18,6 @@ function App() {
       </BrowserRouter>
     </ThemeProvider>
   );
-}
+};
+
+export default App;
