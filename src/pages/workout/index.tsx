@@ -3,6 +3,7 @@ import { Grid, Button, CircularProgress } from '@material-ui/core';
 import { DeleteRounded } from '@material-ui/icons';
 import { useNavigate, useParams } from 'react-router-dom';
 import { collection, DocumentData, getDocs, doc } from '@firebase/firestore';
+import { deleteDoc } from 'firebase/firestore';
 
 import useStyles from './styles';
 import {
@@ -13,7 +14,6 @@ import {
 } from '../../components';
 import { pathToWorkoutNameConverter } from '../../utils';
 import { db } from '../../firebase-config';
-import { deleteDoc } from 'firebase/firestore';
 import { Workout } from '../../types';
 
 export const WorkoutPage = () => {
@@ -31,6 +31,7 @@ export const WorkoutPage = () => {
     createdAt: '',
   });
   const [docID, setDocID] = useState<string>('');
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
   useEffect(() => {
     const getWorkouts = async () => {
@@ -52,24 +53,22 @@ export const WorkoutPage = () => {
 
   const HeaderButton = () => (
     <Button
-      endIcon={<DeleteRounded fontSize="small" />}
+      endIcon={!deleteLoading && <DeleteRounded fontSize="small" />}
       className={classes.headerButton}
       disableElevation
       color="secondary"
       variant="contained"
       onClick={handleDeleteWorkout}
     >
-      Ta bort
+      {deleteLoading ? <CircularProgress size={20} /> : 'Ta bort'}
     </Button>
   );
 
-  // const handleNavigate = () => {
-  //   navigateTo('/link');
-  // };
-
   const handleDeleteWorkout = async () => {
+    setDeleteLoading(true);
     const docRef = doc(db, 'workouts', docID);
     await deleteDoc(docRef);
+    setDeleteLoading(false);
     navigateTo('/all-workouts');
   };
 

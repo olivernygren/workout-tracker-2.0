@@ -26,9 +26,19 @@ import {
 import { Exercise, ExerciseInstance, Superset, Workout } from '../../types';
 import { db } from '../../firebase-config';
 
+// interface FramerBoxProps extends BoxProps {
+//   initial: any;
+//   children: React.ReactNode;
+// }
+
+// const FramerBox: React.FunctionComponent<FramerBoxProps> = ({ children }) => (
+//   <Box>{children}</Box>
+// );
+
 export const CreateWorkoutPage = () => {
   const classes = useStyles();
   const navigateTo = useNavigate();
+
   const defualtExerciseInstance = {
     exercise: { name: '', targetMuscles: [] },
     sets: 0,
@@ -40,7 +50,7 @@ export const CreateWorkoutPage = () => {
     firstExercise: { exercise: { name: '', targetMuscles: [] }, repRange: '' },
     secondExercise: { exercise: { name: '', targetMuscles: [] }, repRange: '' },
   };
-  const workoutsCollectionRef = collection(db, 'workouts');
+
   const [selectedMuscleGroups, setSelectedMuscleGroups] = useState<string[]>(
     []
   );
@@ -71,6 +81,8 @@ export const CreateWorkoutPage = () => {
     createdAt: '',
   });
   const [exercises, setExercises] = useState<DocumentData[]>([]);
+
+  const workoutsCollectionRef = collection(db, 'workouts');
   const exercisesCollectionRef = collection(db, 'exercises');
 
   useEffect(() => {
