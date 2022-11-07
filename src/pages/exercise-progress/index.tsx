@@ -167,7 +167,11 @@ export const ExerciseProgressPage = () => {
     <Page title={tabTitle}>
       <Grid item container direction="column">
         <TitleHeader
-          title={exerciseNameFromPath}
+          title={
+            exerciseNameFromPath.length > 26
+              ? exerciseNameFromPath.substring(0, 26).trim() + '...'
+              : exerciseNameFromPath
+          }
           titleSize="small"
           navigateBackButton
           navigateTo="back"

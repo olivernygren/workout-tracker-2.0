@@ -96,7 +96,7 @@ export const WorkoutPage = () => {
     <Page title={workoutNameFromPath}>
       <Grid item container direction="column">
         <TitleHeader
-          title={workoutNameFromPath}
+          title={workout.name ?? ''}
           titleSize="small"
           navigateBackButton
           navigateTo="back"
